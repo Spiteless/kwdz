@@ -28,7 +28,9 @@ export default function Home() {
 
   useEffect(() => {
     setMappedWords(wordMap(article))
-    setKeywordsProcessed(processKeywords(article))
+    const newKeywordsProcessed = processKeywords(article)
+    delete newKeywordsProcessed[""]
+    setKeywordsProcessed(newKeywordsProcessed)
   }, [article, keywords])
 
   const processKeywords = (str) => {
@@ -160,10 +162,10 @@ export default function Home() {
                 ? keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n")
                 : keywords.text
             }
+            disabled={disabled}
             onChange={handleKeywordsChange}
             variant="outlined"
             label={`Unused Keywords: ${keywordsProcessed.filter(item => item[1] === 0).length}`}
-            disabled={disabled}
             onClick={() => setDisabled(false)}
             fullWidth
             multiline
