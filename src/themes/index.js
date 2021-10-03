@@ -6,7 +6,7 @@ import grey from '@material-ui/core/colors/grey';
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#FF8F8F",
+      main: "#0096FF",
     },
     secondary: {
       main: "#5ABAA7",
