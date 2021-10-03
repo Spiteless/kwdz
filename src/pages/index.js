@@ -147,7 +147,7 @@ export default function Home() {
             multiline
             variant="outlined"
             onChange={handelArticleChange}
-            onClick={()=> setDisabled(true)}
+            onClick={() => setDisabled(true)}
             fullWidth
             rows={25}
           />
@@ -164,24 +164,17 @@ export default function Home() {
             variant="outlined"
             label={`Unused Keywords: ${keywordsProcessed.filter(item => item[1] === 0).length}`}
             disabled={disabled}
-            onClick={ () => setDisabled(false) }
+            onClick={() => setDisabled(false)}
             fullWidth
             multiline
-            rows = {25}
+            rows={25}
           />
-          <Button style= {{marginTop: 5, width: 125}} variant="outlined" color="primary"
+          <Button style={{ marginTop: 5, width: 125 }} variant="outlined" color="primary"
             onClick={() => setDisabled(!disabled)}
           >{disabled ? "Edit" : "See Count"}</Button>
 
         </div>
-
-
       </main>
-      <footer>
-        {/* <pre style={{ fontSize: '80%' }}>{JSON.stringify(keywords.phrases, null, 2)}</pre> */}
-        {/* <pre style={{ fontSize: '80%' }}>{JSON.stringify(disabled, null, 2)}</pre> */}
-        {/* <pre style={{ fontSize: '80%' }}>{JSON.stringify(keywordsProcessed, null, 2)}</pre> */}
-      </footer>
     </div>
   )
 }
