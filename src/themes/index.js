@@ -2,6 +2,7 @@ import { createTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey';
+import { yellow } from '@material-ui/core/colors';
 
 const theme = createTheme({
   palette: {
@@ -9,7 +10,7 @@ const theme = createTheme({
       main: "#0096FF",
     },
     secondary: {
-      main: "#5ABAA7",
+      main: "#ff9100",
     },
     dark: {
       main: grey[900],

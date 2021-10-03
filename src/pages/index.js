@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { TextField, Button } from '@material-ui/core'
+import { border } from '@material-ui/system'
 
 import styles from '../styles/Home.module.css'
 
@@ -14,8 +15,6 @@ export default function Home() {
   const handelArticleChange = (e) => {
     setArticle(e.target.value)
     setMappedWords(wordMap(article))
-    const newKeywordsText = keywordsProcessed.map(item => item[0]).join("\n")
-    setKeywords({ ...keywords, text: newKeywordsText })
     setDisabled(true)
   }
 
@@ -30,6 +29,11 @@ export default function Home() {
     setMappedWords(wordMap(article))
     setKeywordsProcessed(processKeywords(article).filter(item => item[0] != ""))
   }, [article, keywords])
+
+  useEffect(() => {
+    const newKeywordsText = keywordsProcessed.map(item => item[0].toLowerCase()).join("\n")
+    setKeywords({ ...keywords, text: newKeywordsText })
+  }, [disabled])
 
   const processKeywords = (str) => {
     const output = []
@@ -101,11 +105,6 @@ export default function Home() {
     }, [1, -1]);
   }
 
-  const handeKeywordsProcessed = (text) => {
-    newState = {}
-
-  }
-
   const occurrences = (string, subString, allowOverlapping = false) => {
 
     string += "";
@@ -150,6 +149,7 @@ export default function Home() {
             onClick={() => setDisabled(true)}
             fullWidth
             rows={25}
+          // onFocus={() => { setDisabled(true) }}
           />
         </div>
         <div className={styles.columnNarrow}>
@@ -160,21 +160,19 @@ export default function Home() {
                 ? keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n")
                 : keywords.text
             }
-            disabled={disabled}
             onChange={handleKeywordsChange}
             variant="outlined"
+            color="secondary"
             label={keywordsProcessed.length > 0
-              ?  `Unused Keywords: ${keywordsProcessed.filter(item => item[1] === 0).length}`
+              ? `Unused Keywords: ${keywordsProcessed.filter(item => item[1] === 0).length}`
               : "Enter keywords to begin"}
-            onClick={() => setDisabled(false)}
+            onFocus={() => { setDisabled(false) }}
+            onBlur={() => { setDisabled(true) }}
             fullWidth
             multiline
+
             rows={25}
           />
-          <Button style={{ marginTop: 5, width: 125 }} variant="outlined" color="primary"
-            onClick={() => setDisabled(!disabled)}
-          >{disabled ? "Edit" : "See Count"}</Button>
-
         </div>
       </main>
     </div>
