@@ -169,9 +169,9 @@ export default function Home() {
             multiline
             rows = {25}
           />
-          <Button style= {{marginTop: 5}} variant="outlined" color="primary"
+          <Button style= {{marginTop: 5, width: 125}} variant="outlined" color="primary"
             onClick={() => setDisabled(!disabled)}
-          >Edit - {disabled ? "true" : "false"}</Button>
+          >{disabled ? "Edit" : "See Count"}</Button>
 
         </div>
 
