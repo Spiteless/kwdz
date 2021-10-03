@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import { TextField, Button } from '@material-ui/core'
+import { TextField, Button, ButtonGroup } from '@material-ui/core'
 import { border } from '@material-ui/system'
 
 import styles from '../styles/Home.module.css'
@@ -126,6 +126,14 @@ export default function Home() {
     return n;
   }
 
+  const copyToClipboard = (e, limiter) => {
+    console.log("limiter:", limiter)
+    navigator.clipboard.writeText(limiter === 0
+      ? keywordsProcessed.filter(val => val[1] === limiter).map(item => `${item[1]} ${item[0]}`).join("\n")
+      : keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n"))
+    e.target.focus();
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -173,6 +181,14 @@ export default function Home() {
 
             rows={25}
           />
+          <ButtonGroup fullWidth style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1}}>
+            <Button style={{ marginTop: 5}} variant="outlined" color="primary"
+              onClick={(e) => copyToClipboard(e, 9999)}
+            >Copy All</Button>
+            <Button style={{ marginTop: 5}} variant="outlined" color="primary"
+              onClick={(e) => copyToClipboard(e, 0)}
+            >Copy Missing</Button>
+          </ButtonGroup>
         </div>
       </main>
     </div>
