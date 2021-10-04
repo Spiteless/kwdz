@@ -173,7 +173,7 @@ export default function Home() {
             color="secondary"
             label={keywordsProcessed.length > 0
               ? `Unused Keywords: ${keywordsProcessed.filter(item => item[1] === 0).length}`
-              : "Enter keywords to begin"}
+              : "Enter keywords to begin - new term for each line."}
             onFocus={() => { setDisabled(false) }}
             onBlur={() => { setDisabled(true) }}
             fullWidth
