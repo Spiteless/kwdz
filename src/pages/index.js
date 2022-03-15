@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { TextField, Button, ButtonGroup } from '@material-ui/core'
 import { border } from '@material-ui/system'
 
@@ -11,6 +12,9 @@ export default function Home() {
   const [disabled, setDisabled] = useState(false)
   const [mappedWords, setMappedWords] = useState({})
   const [keywordsProcessed, setKeywordsProcessed] = useState([])
+
+  const router = useRouter()
+  console.log(router.query)
 
   const handelArticleChange = (e) => {
     setArticle(e.target.value)
