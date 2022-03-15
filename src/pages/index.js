@@ -14,13 +14,27 @@ export default function Home() {
   const [keywordsProcessed, setKeywordsProcessed] = useState([])
 
   const router = useRouter()
-  console.log(router.query)
+  console.log("router.query----------------------------------", typeof(router.query), router.query)
+  console.log("router.query.kw", typeof(router.query.kw), router.query.kw)
 
   const handelArticleChange = (e) => {
     setArticle(e.target.value)
     setMappedWords(wordMap(article))
     setDisabled(true)
   }
+
+  useEffect(() => {
+    if (router.query.kw) { 
+      const queryKeywords = router.query.kw
+      const newState = { ...queryKeywords }
+      newState.text = queryKeywords.join("\n")
+      newState.phrases = queryKeywords
+      console.log("queryKeywords", queryKeywords)
+      setKeywords(newState)
+    } else {
+      console.log("!!router.query.kw empty", router.query.kw)
+    }
+  }, [router.query])
 
   const handleKeywordsChange = (e) => {
     const newState = { ...keywords }
@@ -140,6 +154,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      { console.log("keywords:",keywords)}
       <Head>
         <title>SEO Keywords Tracker</title>
         <meta name="description" content="Simple tracker to see how often keywords are used in an article" />
