@@ -25,15 +25,24 @@ export default function Home() {
 
   useEffect(() => {
     let counter = 0
+    console.log("##### Enter useEffect", router.query.kw, typeof (router.query.kw))
+    console.log("##### Enter useEffect", !!router.query.kw, runCounter)
     if (
       !!router.query.kw &&
-      typeof (router.query.kw) != "string" &&
       runCounter < 1
     ) {
       const queryKeywords = router.query.kw
       const newState = { ...queryKeywords }
-      newState.text = queryKeywords.join("\n")
-      newState.phrases = queryKeywords
+      console.log("~~~~~~~~~~~~~ typeof queryKeywords", typeof (queryKeywords))
+      if (typeof (queryKeywords) === "string") {
+        console.log("!!!! ran [ string ]")
+        newState.phrases = [queryKeywords]
+        newState.text = queryKeywords
+      } else {
+        console.log("!!!! ran array")
+        newState.phrases = queryKeywords
+        newState.text = queryKeywords.join("\n")
+      }
       setKeywords(newState)
       setRunCounter(runCounter + 1)
     }
@@ -201,7 +210,7 @@ export default function Home() {
             color="secondary"
             label={keywordsProcessed.length > 0
               ? `Unused Keywords: ${keywordsProcessed.filter(item => item[1] === 0).length}`
-              : "Enter keywords to begin - new term for each line."}
+              : "Enter keywords to begin - New line for each term."}
             onFocus={() => { setDisabled(false) }}
             onBlur={() => { setDisabled(true) }}
             fullWidth
