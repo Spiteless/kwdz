@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { TextField, Button, ButtonGroup } from '@material-ui/core'
 import { border } from '@material-ui/system'
 
@@ -12,17 +13,45 @@ export default function Home() {
   const [mappedWords, setMappedWords] = useState({})
   const [keywordsProcessed, setKeywordsProcessed] = useState([])
 
+  const router = useRouter()
+
   const handelArticleChange = (e) => {
     setArticle(e.target.value)
     setMappedWords(wordMap(article))
     setDisabled(true)
   }
 
+  let [runCounter, setRunCounter] = useState(0)
+
+  useEffect(() => {
+    let counter = 0
+    if (
+      !!router.query.kw &&
+      typeof (router.query.kw) != "string" &&
+      runCounter < 1
+    ) {
+      const queryKeywords = router.query.kw
+      const newState = { ...queryKeywords }
+      newState.text = queryKeywords.join("\n")
+      newState.phrases = queryKeywords
+      setKeywords(newState)
+      setRunCounter(runCounter + 1)
+    }
+  }, [router.query.kw])
+
   const handleKeywordsChange = (e) => {
     const newState = { ...keywords }
     newState.text = e.target.value
     newState.phrases = e.target.value.replace("\r", "").split("\n")
     setKeywords(newState)
+    if (newState.phrases.length > 0) {
+      router.push(`/?kw=${[...newState.phrases]
+        .filter(n => n.length > 0)
+        .join("&kw=")
+        }`, undefined, { shallow: true })
+    } else {
+      router.push(`/`, undefined, { shallow: true })
+    }
   }
 
   useEffect(() => {
@@ -127,7 +156,6 @@ export default function Home() {
   }
 
   const copyToClipboard = (e, limiter) => {
-    console.log("limiter:", limiter)
     navigator.clipboard.writeText(limiter === 0
       ? keywordsProcessed.filter(val => val[1] === limiter).map(item => `${item[1]} ${item[0]}`).join("\n")
       : keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n"))
@@ -181,11 +209,11 @@ export default function Home() {
 
             rows={25}
           />
-          <ButtonGroup fullWidth style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1}}>
-            <Button style={{ marginTop: 5}} variant="outlined" color="primary"
+          <ButtonGroup fullWidth style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+            <Button style={{ marginTop: 5 }} variant="outlined" color="primary"
               onClick={(e) => copyToClipboard(e, 9999)}
             >Copy All</Button>
-            <Button style={{ marginTop: 5}} variant="outlined" color="primary"
+            <Button style={{ marginTop: 5 }} variant="outlined" color="primary"
               onClick={(e) => copyToClipboard(e, 0)}
             >Copy Missing</Button>
           </ButtonGroup>
