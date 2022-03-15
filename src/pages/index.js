@@ -27,13 +27,17 @@ export default function Home() {
     let counter = 0
     if (
       !!router.query.kw &&
-      typeof (router.query.kw) != "string" &&
       runCounter < 1
     ) {
       const queryKeywords = router.query.kw
       const newState = { ...queryKeywords }
-      newState.text = queryKeywords.join("\n")
-      newState.phrases = queryKeywords
+      if (typeof (queryKeywords) === "string") {
+        newState.phrases = [queryKeywords]
+        newState.text = queryKeywords
+      } else {
+        newState.phrases = queryKeywords
+        newState.text = queryKeywords.join("\n")
+      }
       setKeywords(newState)
       setRunCounter(runCounter + 1)
     }
@@ -201,7 +205,7 @@ export default function Home() {
             color="secondary"
             label={keywordsProcessed.length > 0
               ? `Unused Keywords: ${keywordsProcessed.filter(item => item[1] === 0).length}`
-              : "Enter keywords to begin - new term for each line."}
+              : "Enter keywords to begin - New line for each term."}
             onFocus={() => { setDisabled(false) }}
             onBlur={() => { setDisabled(true) }}
             fullWidth
