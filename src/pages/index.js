@@ -14,8 +14,6 @@ export default function Home() {
   const [keywordsProcessed, setKeywordsProcessed] = useState([])
 
   const router = useRouter()
-  console.log("router.query----------------------------------", typeof(router.query), router.query)
-  console.log("router.query.kw", typeof(router.query.kw), router.query.kw)
 
   const handelArticleChange = (e) => {
     setArticle(e.target.value)
@@ -23,24 +21,37 @@ export default function Home() {
     setDisabled(true)
   }
 
+  let [runCounter, setRunCounter] = useState(0)
+
   useEffect(() => {
-    if (router.query.kw) { 
+    let counter = 0
+    if (
+      !!router.query.kw &&
+      typeof (router.query.kw) != "string" &&
+      runCounter < 1
+    ) {
       const queryKeywords = router.query.kw
       const newState = { ...queryKeywords }
       newState.text = queryKeywords.join("\n")
       newState.phrases = queryKeywords
-      console.log("queryKeywords", queryKeywords)
       setKeywords(newState)
-    } else {
-      console.log("!!router.query.kw empty", router.query.kw)
+      setRunCounter(runCounter + 1)
     }
-  }, [router.query])
+  }, [router.query.kw])
 
   const handleKeywordsChange = (e) => {
     const newState = { ...keywords }
     newState.text = e.target.value
     newState.phrases = e.target.value.replace("\r", "").split("\n")
     setKeywords(newState)
+    if (newState.phrases.length > 0) {
+      router.push(`/?kw=${[...newState.phrases]
+        .filter(n => n.length > 0)
+        .join("&kw=")
+        }`, undefined, { shallow: true })
+    } else {
+      router.push(`/`, undefined, { shallow: true })
+    }
   }
 
   useEffect(() => {
@@ -145,7 +156,6 @@ export default function Home() {
   }
 
   const copyToClipboard = (e, limiter) => {
-    console.log("limiter:", limiter)
     navigator.clipboard.writeText(limiter === 0
       ? keywordsProcessed.filter(val => val[1] === limiter).map(item => `${item[1]} ${item[0]}`).join("\n")
       : keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n"))
@@ -154,7 +164,6 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      { console.log("keywords:",keywords)}
       <Head>
         <title>SEO Keywords Tracker</title>
         <meta name="description" content="Simple tracker to see how often keywords are used in an article" />
@@ -200,11 +209,11 @@ export default function Home() {
 
             rows={25}
           />
-          <ButtonGroup fullWidth style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1}}>
-            <Button style={{ marginTop: 5}} variant="outlined" color="primary"
+          <ButtonGroup fullWidth style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+            <Button style={{ marginTop: 5 }} variant="outlined" color="primary"
               onClick={(e) => copyToClipboard(e, 9999)}
             >Copy All</Button>
-            <Button style={{ marginTop: 5}} variant="outlined" color="primary"
+            <Button style={{ marginTop: 5 }} variant="outlined" color="primary"
               onClick={(e) => copyToClipboard(e, 0)}
             >Copy Missing</Button>
           </ButtonGroup>
