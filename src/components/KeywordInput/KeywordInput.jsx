@@ -80,15 +80,28 @@ export default function KeywordInput(props) {
         onBlur={() => { setDisabled(true) }}
         fullWidth
         multiline
-
         rows={25}
       />
-      <ButtonGroup fullWidth style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
-        <Button style={{ marginTp: 5 }} variant="outlined" color="primary"
+      <ButtonGroup fullWidth style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexGrow: 1,
+        whiteSpace: 'nowrap'
+      }}>
+        <Button
+          style={{ marginTop: 5, minWidth: 140 }}
+          variant="outlined"
+          color="primary"
           onClick={(e) => copyToClipboard(e, 9999)}
-        >Copy All</Button>
-        <Button style={{ marginTop: 5 }} variant="outlined" color="primary"
-          onClick={(e) => copyToClipboard(e, 0)}
+        >
+          Copy All
+          </Button>
+        <Button
+        style={{ marginTop: 5, minWidth: 140 }}
+        variant="outlined"
+        color="primary"
+        onClick={(e) => copyToClipboard(e, 0)}
         >Copy Missing</Button>
       </ButtonGroup>
     </>

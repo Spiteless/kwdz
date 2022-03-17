@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-import KeywordInput from '../components/KeywordInput/KeywordInput.js'
-import ArticleInput from '../components/ArticleInput/ArticleInput.js'
+import KeywordInput from '@components/KeywordInput/KeywordInput'
 
-import styles from '../styles/Home.module.css'
+import ArticleInput from '@components/ArticleInput'
+import Header from '@components/Header'
+
+import styles from '@styles/Home.module.css'
 
 export default function Home() {
   const [article, setArticle] = useState("")
@@ -65,6 +67,7 @@ export default function Home() {
         <meta name="description" content="Simple tracker to see how often keywords are used in an article" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header/>
 
 
       <main className={styles.main}>
