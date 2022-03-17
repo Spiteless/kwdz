@@ -7,7 +7,6 @@ export default function KeywordInput(props) {
     keywords,
     setKeywords,
     keywordsProcessed,
-    setKeywordsProcessed,
     disabled,
     setDisabled,
     runCounter,
@@ -36,9 +35,14 @@ export default function KeywordInput(props) {
   }, [router.query.kw])
 
   const copyToClipboard = (e, limiter) => {
-    navigator.clipboard.writeText(limiter === 0
-      ? keywordsProcessed.filter(val => val[1] === limiter).map(item => `${item[1]} ${item[0]}`).join("\n")
-      : keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n"))
+    let text = ""
+    if (limiter === 0) {
+      text = keywordsProcessed.filter(val => val[1] === 0)
+        .map(item => `${item[0]}`).join("\n")
+    } else {
+      text = keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n")
+    }
+    navigator.clipboard.writeText(text)
     e.target.focus();
   };
 
@@ -80,7 +84,7 @@ export default function KeywordInput(props) {
         rows={25}
       />
       <ButtonGroup fullWidth style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
-          <Button style={{ marginTp: 5 }} variant="outlined" color="primary"
+        <Button style={{ marginTp: 5 }} variant="outlined" color="primary"
           onClick={(e) => copyToClipboard(e, 9999)}
         >Copy All</Button>
         <Button style={{ marginTop: 5 }} variant="outlined" color="primary"
