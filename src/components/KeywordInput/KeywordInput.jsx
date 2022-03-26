@@ -39,10 +39,12 @@ export default function KeywordInput(props) {
     if (limiter === 0) {
       text = keywordsProcessed.filter(val => val[1] === 0)
         .map(item => `${item[0]}`).join("\n")
+      text = "%% MISSING WORDS\n" + text + "\n%%"
     } else {
       text = keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n")
+      text = "%% WORDS COUNT\n" + text + "\n%%"
     }
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText("%% MISSING WORDS\n" + text + "\n%%")
     e.target.focus();
   };
 
@@ -80,15 +82,28 @@ export default function KeywordInput(props) {
         onBlur={() => { setDisabled(true) }}
         fullWidth
         multiline
-
         rows={25}
       />
-      <ButtonGroup fullWidth style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
-        <Button style={{ marginTp: 5 }} variant="outlined" color="primary"
+      <ButtonGroup fullWidth style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexGrow: 1,
+        whiteSpace: 'nowrap'
+      }}>
+        <Button
+          style={{ marginTop: 5, minWidth: 140 }}
+          variant="outlined"
+          color="primary"
           onClick={(e) => copyToClipboard(e, 9999)}
-        >Copy All</Button>
-        <Button style={{ marginTop: 5 }} variant="outlined" color="primary"
-          onClick={(e) => copyToClipboard(e, 0)}
+        >
+          Copy All
+          </Button>
+        <Button
+        style={{ marginTop: 5, minWidth: 140 }}
+        variant="outlined"
+        color="primary"
+        onClick={(e) => copyToClipboard(e, 0)}
         >Copy Missing</Button>
       </ButtonGroup>
     </>
