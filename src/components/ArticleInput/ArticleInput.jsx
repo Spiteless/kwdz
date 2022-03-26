@@ -1,44 +1,48 @@
 import { useState, useEffect } from "react";
-import { useRouter } from 'next/router'
-import { TextField } from '@material-ui/core'
+import { useRouter } from "next/router";
+import { TextField } from "@material-ui/core";
 
 export default function ArticleInput(props) {
-  const {
-    article,
-    setArticle,
-    setDisabled,
-  } = props
+  const { article, setArticle, setDisabled } = props;
 
   const handleArticleChange = (e) => {
-    setArticle(e.target.value)
-    setDisabled(true)
-  }
+    const newArticleText = cleanString(e.target.value);
+    setArticle(newArticleText);
+    setDisabled(true);
+  };
 
-  const cleanString = (str) => {
-    return str.replace(/[^\w\s]|_/g, '')
-      .replace(/\s+/g, ' ')
-      .toLowerCase();
-  }
+  const getWordsByWordBoundaries = (str) => {
+    //
+    return extractSubstr(str, /\b[a-z\d]+\b/g);
+  };
 
   const extractSubstr = (str, regexp) => {
     return cleanString(str).match(regexp) || [];
-  }
+  };
 
-  const getWordsByWordBoundaries = (str) => {
-    return extractSubstr(str, /\b[a-z\d]+\b/g);
-  }
+  const cleanString = (str) => {
+    return (
+      str
+        .replace(/%%(.|\n)*%%/gm, "")
+        //select everything between double-percent signs and remove it
+        .replace(/[^\w\s]|_/g, "")
+        .replace(/\s+/g, " ") //replace whitespace characters with ' '
+        .replace(/-|'/gm, " ") //remove dashes and apostrophes
+        .toLowerCase()
+    );
+  };
 
-  const countWords = (str) => {
+  const countWordsInArticle = (str) => {
     return getWordsByWordBoundaries(str).length;
-  }
+  };
 
   return (
     <>
       <TextField
-        name='article'
+        name="article"
         value={article}
         id="article"
-        label={`Word Count: ${countWords(article)}`}
+        label={`Word Count: ${countWordsInArticle(article)}`}
         placeholder="Paste article text here."
         multiline
         variant="outlined"
@@ -48,5 +52,5 @@ export default function ArticleInput(props) {
         rows={25}
       />
     </>
-  )
+  );
 }
