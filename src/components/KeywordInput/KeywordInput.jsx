@@ -39,10 +39,12 @@ export default function KeywordInput(props) {
     if (limiter === 0) {
       text = keywordsProcessed.filter(val => val[1] === 0)
         .map(item => `${item[0]}`).join("\n")
+      text = "%% MISSING WORDS\n" + text + "\n%%"
     } else {
       text = keywordsProcessed.map(item => `${item[1]} ${item[0]}`).join("\n")
+      text = "%% WORDS COUNT\n" + text + "\n%%"
     }
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText("%% MISSING WORDS\n" + text + "\n%%")
     e.target.focus();
   };
 
