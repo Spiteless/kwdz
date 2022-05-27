@@ -1,18 +1,37 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { TextField } from "@material-ui/core";
+import { useAppState } from "@context/AppContext";
 
 export default function ArticleInput(props) {
-  const { article, setArticle, setDisabled } = props;
+  const {
+    // article,
+    // setArticle,
+    // setDisabled
+  } = props;
+  const {
+    context,
+    setContext,
+    keywords,
+    setKeywords,
+    keywordsProcessed,
+    setKeywordsProcessed,
+    setRouter,
+    setDisabled,
+    article, setArticle
+  } = useAppState();
+  const appState = useAppState();
 
   const handleArticleChange = (e) => {
     const newArticleText = cleanString(e.target.value);
+    const newContext = { ...context };
+    newContext.article = newArticleText;
     setArticle(newArticleText);
+    setContext(newContext);
     setDisabled(true);
   };
 
   const getWordsByWordBoundaries = (str) => {
-    //
     return extractSubstr(str, /\b[a-z\d]+\b/g);
   };
 
@@ -36,13 +55,22 @@ export default function ArticleInput(props) {
     return getWordsByWordBoundaries(str).length;
   };
 
+  let textLabel = `Word Count: ${countWordsInArticle(article)}`;
+  if (context.target) {
+    textLabel += `/${context.target}`;
+  }
+  if (context.dueDate) {
+    textLabel += ` -- due ${context.dueDate}`;
+  }
+
   return (
     <>
+
       <TextField
         name="article"
         value={article}
         id="article"
-        label={`Word Count: ${countWordsInArticle(article)}`}
+        label={textLabel}
         placeholder="Paste article text here."
         multiline
         variant="outlined"
