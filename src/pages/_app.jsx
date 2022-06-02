@@ -1,5 +1,6 @@
 import "../styles/globals.css";
-import { ThemeProvider, CssBaseline } from '@mui/material/styles';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { ContextProvider } from "@context/AppContext";
 
 import theme from "../themes";
