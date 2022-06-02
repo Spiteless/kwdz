@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { TextField } from "@material-ui/core";
 import { useAppState } from "@context/AppContext";
+import { TextField } from "@mui/material";
 
 export default function ArticleInput(props) {
   const {
