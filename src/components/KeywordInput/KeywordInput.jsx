@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from 'next/router'
-import { TextField, Button, ButtonGroup } from '@material-ui/core'
+import { TextField, Button, ButtonGroup } from '@mui/material'
 
 export default function KeywordInput(props) {
   const {

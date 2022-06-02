@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import { ThemeProvider, CssBaseline } from "@material-ui/core";
+import { ThemeProvider } from '@mui/material/styles';
 
 import theme from "../themes";
 

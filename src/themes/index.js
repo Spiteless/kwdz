@@ -1,8 +1,8 @@
-import { createTheme } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
-import grey from '@material-ui/core/colors/grey';
-import { yellow } from '@material-ui/core/colors';
+import { createTheme } from '@mui/material/styles';
+import { orange, yellow, grey, green, purple } from '@mui/material/colors';
+
+
+
 
 const theme = createTheme({
   palette: {
@@ -29,7 +29,7 @@ const theme = createTheme({
     }
   },
   utils: {
-    backgroundFocus: ({ratio, bg, box = 50}) => (
+    backgroundFocus: ({ ratio, bg, box = 50 }) => (
       `${((bg + (50 - box) / ratio - 50) * (ratio / (ratio - 1)) + 50) * 1}%`
     )
   }
