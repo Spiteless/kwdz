@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { TextField, Button, ButtonGroup } from "@material-ui/core";
+import { TextField, Button, ButtonGroup } from '@mui/material'
 
 import { useAppState } from "@context/AppContext";
 
