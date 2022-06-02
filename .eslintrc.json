@@ -15,7 +15,7 @@
       "alias": [
         ["@components", "./src/components"],
         ["@features", "./src/features"],
-        ["@images", "./src/assets/images"]
+        ["@images", "./src/assets/images"],
         ["@styles", "./src/styles"]
       ]
     }
