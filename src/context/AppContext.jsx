@@ -11,11 +11,10 @@ export function useAppState() {
 }
 
 const initialContext = {
-  keywords: [],
   target: false,
   dueDate: "",
   isLoaded: false,
-  article: {},
+  article: "",
 };
 
 export function ContextProvider({ children }) {
@@ -32,18 +31,30 @@ export function ContextProvider({ children }) {
     const newContext = { ...context };
 
     newContext.isLoaded = true;
-    newContext.keywords = router.query.kw || [];
     newContext.target = router.query.target || false;
     newContext.dueDate = router.query.due || "";
 
     setContext(newContext);
   }, [router.isReady]);
 
+  useEffect(() => {
+    setKeywordsProcessed(
+      processKeywords(article, keywords.phrases).filter((item) => item[0] != "")
+    );
+  }, [article, keywords]);
+
+  useEffect(() => {
+    const newKeywordsText = keywordsProcessed
+      .map((item) => item[0].toLowerCase())
+      .join("\n");
+    setKeywords({ ...keywords, text: newKeywordsText });
+  }, [disabled]);
+
   function setRouter(state) {
     const queryObj = {};
 
     if (state.keywords) queryObj.kw = state.keywords;
-    if (state.dueDate) queryObj.due = state.queryDate;
+    if (state.dueDate) queryObj.due = state.dueDate;
     if (state.target) queryObj.target = state.target;
 
     let query = "/?" + queryString.stringify(queryObj);
@@ -51,7 +62,37 @@ export function ContextProvider({ children }) {
     router.push(query, undefined, { shallow: true });
   }
 
-  // function setKeywords(keywords) {}
+  const setTarget = (text) => {
+    const num = parseInt(text);
+    if (Number.isInteger(num)) {
+      const newContext = { ...context };
+      newContext.target = num;
+      setRouter(newContext);
+      setContext(newContext);
+    }
+  };
+
+  const setDueDate = (text) => {
+    const newContext = { ...context };
+    newContext.dueDate = text;
+    setRouter(newContext);
+    setContext(newContext);
+  };
+
+  const split = (text) => {
+    return text.split(": ");
+  };
+
+  const functionNames = {
+    setTarget: setTarget,
+    setDueDate: setDueDate,
+  };
+
+  const searchFuncs = {
+    functionNames,
+    split,
+    setTarget,
+  };
 
   const exports = {
     context,
@@ -65,6 +106,7 @@ export function ContextProvider({ children }) {
     setKeywordsProcessed,
     article,
     setArticle,
+    searchFuncs,
   };
 
   return <AppContext.Provider value={exports}>{children}</AppContext.Provider>;
