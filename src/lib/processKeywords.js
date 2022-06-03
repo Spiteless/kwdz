@@ -1,12 +1,12 @@
-export default function processKeywords(articleText) {
+export default function processKeywords(str, phrases) {
   const output = [];
-  keywords.phrases.map((key) => {
+  phrases.map((key) => {
     output.push([key, occurrences(str.toLowerCase(), key.toLowerCase())]);
   });
   output.sort((a, b) => {
     if (a[0].toLowerCase() < b[0].toLowerCase()) return -1;
     if (a[0].toLowerCase() > b[0].toLowerCase()) return 1;
-    return 0;
+    return 0; ``
   });
   output.sort((a, b) => {
     return a[1] - b[1];
