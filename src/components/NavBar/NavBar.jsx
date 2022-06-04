@@ -19,7 +19,6 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 
-import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
 
 import Search from "./Search";
@@ -128,6 +127,8 @@ export default function PrimarySearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <Offset />
       <AppBar
+        // as="nav"
+        component="nav"
         position="fixed"
         sx={{
           display: "flex",
@@ -137,7 +138,7 @@ export default function PrimarySearchAppBar() {
         }}
       >
         <Toolbar sx={{ width: "100vw" }}>
-          {/* <IconButton
+          <IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -145,18 +146,22 @@ export default function PrimarySearchAppBar() {
             sx={{ mr: 2 }}
           >
             <MenuIcon />
-          </IconButton> */}
+          </IconButton>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{
+              display: { xs: "block", sm: "block" },
+              mr: { xs: 2, sm: 0 },
+            }}
           >
             Tracker
           </Typography>
           <Search />
-          <Box sx={{ flexGrow: 1 }} />
-          {/* <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          {/* <Box sx={{ flexGrow: 1 }} /> */}
+          {/*
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show 4 new mails"
@@ -195,7 +200,7 @@ export default function PrimarySearchAppBar() {
             >
               <AccountCircle />
             </IconButton>
-          </Box> */}
+          </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -208,10 +213,11 @@ export default function PrimarySearchAppBar() {
               <MoreIcon />
             </IconButton>
           </Box>
+          */}
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMobileMenu} */}
+      {/* {renderMenu} */}
     </Box>
   );
 }
