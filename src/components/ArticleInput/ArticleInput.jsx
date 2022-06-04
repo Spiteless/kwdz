@@ -4,23 +4,8 @@ import { TextField } from "@mui/material";
 import { useAppState } from "@context/AppContext";
 
 export default function ArticleInput(props) {
-  const {
-    // article,
-    // setArticle,
-    // setDisabled
-  } = props;
-  const {
-    context,
-    setContext,
-    keywords,
-    setKeywords,
-    keywordsProcessed,
-    setKeywordsProcessed,
-    setRouter,
-    setDisabled,
-    article, setArticle
-  } = useAppState();
-  const appState = useAppState();
+  const { context, setContext, setDisabled, article, setArticle } =
+    useAppState();
 
   const handleArticleChange = (e) => {
     const newArticleText = cleanString(e.target.value);
@@ -64,21 +49,20 @@ export default function ArticleInput(props) {
   }
 
   return (
-    <>
-
-      <TextField
-        name="article"
-        value={article}
-        id="article"
-        label={textLabel}
-        placeholder="Paste article text here."
-        multiline
-        variant="outlined"
-        onChange={handleArticleChange}
-        onClick={() => setDisabled(true)}
-        fullWidth
-        rows={25}
-      />
-    </>
+    <TextField
+      sx={{}}
+      inputProps={{}}
+      name="article"
+      value={article}
+      id="article"
+      label={textLabel}
+      placeholder="Paste article text here."
+      multiline
+      variant="outlined"
+      onChange={handleArticleChange}
+      onClick={() => setDisabled(true)}
+      fullWidth
+      rows={2}
+    />
   );
 }

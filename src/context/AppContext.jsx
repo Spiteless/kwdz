@@ -50,6 +50,21 @@ export function ContextProvider({ children }) {
     setKeywords({ ...keywords, text: newKeywordsText });
   }, [disabled]);
 
+  useEffect(() => {
+    if (!!router.query.kw) {
+      const queryKeywords = router.query.kw;
+      const newState = { ...queryKeywords };
+      if (typeof queryKeywords === "string") {
+        newState.phrases = [queryKeywords];
+        newState.text = queryKeywords;
+      } else {
+        newState.phrases = queryKeywords;
+        newState.text = queryKeywords.join("\n");
+      }
+      setKeywords(newState);
+    }
+  }, [router.query.kw]);
+
   function setRouter(state) {
     const queryObj = {};
 
@@ -69,7 +84,11 @@ export function ContextProvider({ children }) {
       newContext.target = num;
       setRouter(newContext);
       setContext(newContext);
+      return "Target Set!"
+    } else {
+      return "Target Not Set :("
     }
+
   };
 
   const setDueDate = (text) => {
@@ -77,15 +96,29 @@ export function ContextProvider({ children }) {
     newContext.dueDate = text;
     setRouter(newContext);
     setContext(newContext);
+
+    return "DueDate Set!"
   };
 
   const split = (text) => {
     return text.split(": ");
   };
 
+  const copyToClipboard = (e) => {
+    let text = "";
+    text = keywordsProcessed
+      .filter((val) => val[1] === 0)
+      .map((item) => `${item[0]}`)
+      .join("\n");
+    text = "%% MISSING WORDS\n" + text + "\n%%";
+    navigator.clipboard.writeText(text);
+    return "Clipboard Set!"
+  };
+
   const functionNames = {
     setTarget: setTarget,
     setDueDate: setDueDate,
+    "copyMissingToClipboard()": copyToClipboard,
   };
 
   const searchFuncs = {

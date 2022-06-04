@@ -1,26 +1,17 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 
+import { Box, Container } from "@mui/material";
+
 import KeywordInput from "@components/KeywordInput/KeywordInput";
 import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
 
-import styles from "@styles/Home.module.css";
-
-import { useAppState } from "@context/AppContext";
+// import styles from "@styles/Home.module.css";
 
 export default function Home() {
-  const {
-    disabled,
-    keywordsProcessed,
-    setKeywordsProcessed,
-    article,
-    keywords,
-    setKeywords,
-  } = useAppState();
-
   return (
-    <div className={styles.container}>
+    <Container>
       <Head>
         <title>Phrases Tracker Tool</title>
         <meta
@@ -32,14 +23,14 @@ export default function Home() {
 
       <NavBar />
 
-      <main className={styles.main}>
-        <div className={styles.columnWide}>
+      <Box as="main" >
+        <Box sx={{my:4}}>
           <ArticleInput />
-        </div>
-        <div className={styles.columnNarrow}>
+        </Box>
+        <Box sx={{my:4}}>
           <KeywordInput />
-        </div>
-      </main>
-    </div>
+        </Box>
+      </Box>
+    </Container>
   );
 }

@@ -69,17 +69,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Search() {
   const { searchFuncs } = useAppState();
-  const { split, functionNames, setTarget } = searchFuncs;
-  console.log(searchFuncs, split);
-
-  const [searchValue, setSearchValue] = useState("");
+  const { split, functionNames } = searchFuncs;
 
   const test = Object.keys(functionNames);
   const menuFunctions = test.map((n) => ({ label: n + ": " }));
-  // const menuFunctions = [{ label: "setTarget: " }];
-  // const menuFunctions = [Object.keys(functionNames).map( str => {label: str})];
-  // console.log(Object.keys(functionNames))
-  // console.log(result[0], typeof result[0])
 
   useHotkeys(
     "alt+/",
@@ -92,10 +85,6 @@ export default function Search() {
     }
   );
 
-  const handleSearchChange = (e) => {
-    setSearchValue(e.target.value);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -104,29 +93,27 @@ export default function Search() {
     e.preventDefault();
     const [func, argument] = split(inputValue);
     functionNames[func](argument);
+    setInputValue("");
   };
 
-  const [value, setValue] = React.useState([]);
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  const handleInputChange = (event, newInputValue) => {
+    setInputValue(newInputValue);
+  };
 
   return (
     <Autocomplete
       freeSolo
       clearOnEscape
       clearOnBlur
+      autoHighlight
       id="combo-box-demo"
       options={menuFunctions}
       sx={{ width: 300 }}
-      onSubmit={handleAutocompleteSubmit}
-      onChange={(event, newValue) => {
-        console.log("onChange", event, newValue);
-        setValue(newValue);
-      }}
+      onSubmit={(e) => handleAutocompleteSubmit(e)}
       inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        console.log("onInputChange", event, newInputValue);
-        setInputValue(newInputValue);
-      }}
+      onInputChange={(e, newInputValue) => handleInputChange(e, newInputValue)}
       renderInput={(params) => (
         <SearchField ref={params.InputProps.ref} label="Movie">
           <SearchIconWrapper>
