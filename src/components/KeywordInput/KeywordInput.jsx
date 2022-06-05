@@ -37,7 +37,6 @@ export default function KeywordInput(props) {
   return (
     <>
       <Tags />
-      {/* {console.log(appState)} */}
       {/* <Buttons /> */}
     </>
   );
@@ -125,7 +124,9 @@ const Tags = () => {
       renderTags={(tagValue, getTagProps) =>
         tagValue.map((option, index) => (
           <Chip
-            label={`${option.name}: ${option.count}`}
+            label={
+              option.count > 0 ? `${option.name}: ${option.count}` : option.name
+            }
             {...getTagProps({ index })}
             color={option.count > 0 ? "success" : "default"}
           />

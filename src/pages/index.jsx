@@ -18,7 +18,7 @@ export default function Home() {
           name="Phrases Tracker Tool"
           content="Simple tracker to see how often keywords are used in an article"
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
 
       <NavBar />
