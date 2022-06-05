@@ -40,10 +40,8 @@ export function ContextProvider({ children }) {
   }, [router.isReady]);
 
   useEffect(() => {
-    const newKeywordsProcessed = processKeywords(article, keywords.phrases)
-    setKeywordsProcessed(
-      newKeywordsProcessed
-    );
+    const newKeywordsProcessed = processKeywords(article, keywords.phrases);
+    setKeywordsProcessed(newKeywordsProcessed);
   }, [article, keywords]);
 
   useEffect(() => {
@@ -70,13 +68,13 @@ export function ContextProvider({ children }) {
 
   function setRouter(state) {
     const queryObj = {};
-    
+
     if (state.keywords) queryObj.kw = state.keywords;
     if (state.dueDate) queryObj.due = state.dueDate;
     if (state.target) queryObj.target = state.target;
-    
+
     let query = "/?" + queryString.stringify(queryObj);
-    
+
     router.push(query, undefined, { shallow: true });
   }
 
@@ -85,14 +83,13 @@ export function ContextProvider({ children }) {
     if (Number.isInteger(num)) {
       const newContext = { ...context };
       newContext.target = num;
-      newContext.keywords = keywordsProcessed.map(k => k.name)
+      newContext.keywords = keywordsProcessed.map((k) => k.name);
       setRouter(newContext);
       setContext(newContext);
-      return "Target Set!"
+      return "Target Set!";
     } else {
-      return "Target Not Set :("
+      return "Target Not Set :(";
     }
-
   };
 
   const setDueDate = (text) => {
@@ -101,7 +98,7 @@ export function ContextProvider({ children }) {
     setRouter(newContext);
     setContext(newContext);
 
-    return "DueDate Set!"
+    return "DueDate Set!";
   };
 
   const split = (text) => {
@@ -111,12 +108,12 @@ export function ContextProvider({ children }) {
   const copyToClipboard = (e) => {
     let text = "";
     text = keywordsProcessed
-      .filter((val) => val[1] === 0)
-      .map((item) => `${item[0]}`)
+      .filter((val) => val.count === 0)
+      .map((val) => val.name)
       .join("\n");
     text = "%% MISSING WORDS\n" + text + "\n%%";
     navigator.clipboard.writeText(text);
-    return "Clipboard Set!"
+    return "Clipboard Set!";
   };
 
   const functionNames = {
