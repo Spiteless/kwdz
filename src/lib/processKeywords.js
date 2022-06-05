@@ -1,4 +1,26 @@
-export default function processKeywords(str, phrases) {
+export default function processKeywords(article, phrases) {
+  const output = [];
+  phrases.map(phrase => {
+    const sub = {}
+    sub.count = occurrences(article, phrase)
+    sub.name = phrase.toLowerCase()
+    output.push(sub)
+  })
+  output.sort((a, b) => {
+    if (a.name < b.name) return -1
+    if (a.name > b.name) return 1
+    return 0
+  })
+  output.sort((a, b) => {
+    if (a.count < b.count) return -1
+    if (a.count > b.count) return 1
+    return 0
+  })
+
+  return output
+}
+
+function processKeywordsBACKUP(str, phrases) {
   const output = [];
   phrases.map((key) => {
     output.push([key, occurrences(str.toLowerCase(), key.toLowerCase())]);
@@ -11,6 +33,7 @@ export default function processKeywords(str, phrases) {
   output.sort((a, b) => {
     return a[1] - b[1];
   });
+  console.log(output)
   return output;
 }
 

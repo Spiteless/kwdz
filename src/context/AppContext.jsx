@@ -23,6 +23,8 @@ export function ContextProvider({ children }) {
   const [context, setContext] = useState(initialContext);
   const [disabled, setDisabled] = useState(false);
   const [keywords, setKeywords] = useState({ text: "", phrases: [] });
+  const [text, setText] = useState("");
+  const [phrases, setPhrases] = useState([]);
   const [keywordsProcessed, setKeywordsProcessed] = useState([]);
   const [article, setArticle] = useState("");
 
@@ -38,13 +40,14 @@ export function ContextProvider({ children }) {
   }, [router.isReady]);
 
   useEffect(() => {
+    const newKeywordsProcessed = processKeywords(article, keywords.phrases)
     setKeywordsProcessed(
-      processKeywords(article, keywords.phrases).filter((item) => item[0] != "")
+      newKeywordsProcessed
     );
   }, [article, keywords]);
 
   useEffect(() => {
-    const newKeywordsText = keywordsProcessed
+    const newKeywordsText = Object.keys(keywordsProcessed)
       .map((item) => item[0].toLowerCase())
       .join("\n");
     setKeywords({ ...keywords, text: newKeywordsText });
@@ -67,13 +70,13 @@ export function ContextProvider({ children }) {
 
   function setRouter(state) {
     const queryObj = {};
-
+    
     if (state.keywords) queryObj.kw = state.keywords;
     if (state.dueDate) queryObj.due = state.dueDate;
     if (state.target) queryObj.target = state.target;
-
+    
     let query = "/?" + queryString.stringify(queryObj);
-
+    
     router.push(query, undefined, { shallow: true });
   }
 
@@ -82,6 +85,7 @@ export function ContextProvider({ children }) {
     if (Number.isInteger(num)) {
       const newContext = { ...context };
       newContext.target = num;
+      newContext.keywords = keywordsProcessed.map(k => k.name)
       setRouter(newContext);
       setContext(newContext);
       return "Target Set!"
