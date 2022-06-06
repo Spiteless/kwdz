@@ -15,6 +15,7 @@ const initialContext = {
   dueDate: "",
   isLoaded: false,
   article: "",
+  themeColor: "blue"
 };
 
 export function ContextProvider({ children }) {
@@ -102,7 +103,8 @@ export function ContextProvider({ children }) {
   };
 
   const split = (text) => {
-    return text.split(": ");
+    let [func, ...vals] = text.split(": ")
+    return [func, vals.join(": ")];
   };
 
   const copyToClipboard = (e) => {
@@ -119,6 +121,7 @@ export function ContextProvider({ children }) {
   const functionNames = {
     setTarget: setTarget,
     setDueDate: setDueDate,
+    setArticle: setArticle,
     "copyMissingToClipboard()": copyToClipboard,
   };
 
@@ -126,6 +129,7 @@ export function ContextProvider({ children }) {
     functionNames,
     split,
     setTarget,
+    setArticle,
   };
 
   const exports = {

@@ -97,15 +97,19 @@ const Tags = () => {
   } = useAppState();
 
   const [value, setValue] = useState(keywordsProcessed);
-  const [inputValue, setInputValue] = useState("");
+  // const [inputValue, setInputValue] = useState("");
+  // const [capture, setCapture] = useState({});
 
   // const handleChange = () => {
   //   setValue(keywordsProcessed.filter(phrase => phrase.count === 0));
   // };
 
   return (
+    <>
     <Autocomplete
       multiple
+      clearOnBlur
+      freeSolo
       id="tags-filled"
       options={keywordsProcessed}
       getOptionLabel={(option) => option.name}
@@ -127,12 +131,12 @@ const Tags = () => {
             label={
               option.count > 0 ? `${option.name}: ${option.count}` : option.name
             }
+            // onClick={console.log(`boop! ${option.name}`)}
             {...getTagProps({ index })}
             color={option.count > 0 ? "success" : "default"}
           />
         ))
       }
-      freeSolo
       renderInput={(params) => (
         <TextField
           {...params}
@@ -143,5 +147,14 @@ const Tags = () => {
         />
       )}
     />
+    {/* <pre>{JSON.stringify(capture)}</pre>
+    <pre>{JSON.stringify(inputValue)}</pre> */}
+    </>
   );
 };
+
+// TODO
+// Chips: Add animation for color change
+// Chips: OnClick set to alternate color
+// Chips: []
+// 
