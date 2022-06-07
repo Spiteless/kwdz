@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 
-import processKeywords from "@lib/processKeywords";
+import { processKeywords, getColor } from "@lib/processKeywords";
 
 const AppContext = React.createContext();
 
@@ -15,7 +15,7 @@ const initialContext = {
   dueDate: "",
   isLoaded: false,
   article: "",
-  themeColor: "blue"
+  themeColor: "blue",
 };
 
 export function ContextProvider({ children }) {
@@ -23,11 +23,11 @@ export function ContextProvider({ children }) {
 
   const [context, setContext] = useState(initialContext);
   const [disabled, setDisabled] = useState(false);
-  const [keywords, setKeywords] = useState({ text: "", phrases: [] });
-  const [text, setText] = useState("");
-  const [phrases, setPhrases] = useState([]);
+  const [keywords, setKeywords] = useState([]);
   const [keywordsProcessed, setKeywordsProcessed] = useState([]);
   const [article, setArticle] = useState("");
+  const [forceRerender, setForceRerender] = useState(0);
+  const [totalRenders, setTotalRenders] = useState(0);
 
   useEffect(() => {
     //Set application state via router from initial load
@@ -41,36 +41,57 @@ export function ContextProvider({ children }) {
   }, [router.isReady]);
 
   useEffect(() => {
-    const newKeywordsProcessed = processKeywords(article, keywords.phrases);
-    setKeywordsProcessed(newKeywordsProcessed);
-  }, [article, keywords]);
-
-  useEffect(() => {
-    const newKeywordsText = Object.keys(keywordsProcessed)
-      .map((item) => item[0].toLowerCase())
-      .join("\n");
-    setKeywords({ ...keywords, text: newKeywordsText });
-  }, [disabled]);
-
-  useEffect(() => {
-    if (!!router.query.kw) {
-      const queryKeywords = router.query.kw;
-      const newState = { ...queryKeywords };
-      if (typeof queryKeywords === "string") {
-        newState.phrases = [queryKeywords];
-        newState.text = queryKeywords;
-      } else {
-        newState.phrases = queryKeywords;
-        newState.text = queryKeywords.join("\n");
-      }
-      setKeywords(newState);
+    if (router.isReady) {
+      updateKeywords(article, keywords);
     }
-  }, [router.query.kw]);
+  }, [article, keywords, disabled, forceRerender]);
+
+  useEffect(() => {
+    // create inital keywords array
+    let initialKW = [];
+    const names = { kw: 0, k0: 0, k1: 1, k2: 2, k3: 3 };
+    const query = router.query;
+
+    for (const kw in names) {
+      //if router.query[kw] exists
+      if (!!router.query[kw]) {
+        let group = router.query[kw];
+        let tag = names[kw];
+        if (typeof group === "string") {
+          group = [group];
+        }
+        group.map((k) => {
+          let val = {
+            name: k.toLowerCase(),
+            group: tag,
+            count: 0,
+            hidden: false,
+          };
+          initialKW.push(val);
+        });
+      }
+    }
+
+    updateKeywords("", initialKW);
+  }, [router.isReady]);
 
   function setRouter(state) {
     const queryObj = {};
 
-    if (state.keywords) queryObj.kw = state.keywords;
+    if (state.keywords) {
+      let kw = [...state.keywords];
+
+      kw.reduce(
+        (previousValue, currentValue) => {
+          previousValue[currentValue.group].push(currentValue.name);
+          return previousValue;
+        },
+        [[], [], [], []]
+      ).map((group, index) => {
+        if (group.length > 0) queryObj[`k${index}`] = [...group];
+      });
+    }
+
     if (state.dueDate) queryObj.due = state.dueDate;
     if (state.target) queryObj.target = state.target;
 
@@ -84,7 +105,7 @@ export function ContextProvider({ children }) {
     if (Number.isInteger(num)) {
       const newContext = { ...context };
       newContext.target = num;
-      newContext.keywords = keywordsProcessed.map((k) => k.name);
+      newContext.keywords = keywords;
       setRouter(newContext);
       setContext(newContext);
       return "Target Set!";
@@ -103,7 +124,7 @@ export function ContextProvider({ children }) {
   };
 
   const split = (text) => {
-    let [func, ...vals] = text.split(": ")
+    let [func, ...vals] = text.split(": ");
     return [func, vals.join(": ")];
   };
 
@@ -118,11 +139,19 @@ export function ContextProvider({ children }) {
     return "Clipboard Set!";
   };
 
+  const displayAll = () => {
+    const newKeywords = updateKeywords("", keywords, { hidden: false });
+
+    setForceRerender(forceRerender + 1);
+    return "All keywords unhidden!";
+  };
+
   const functionNames = {
     setTarget: setTarget,
     setDueDate: setDueDate,
     setArticle: setArticle,
     "copyMissingToClipboard()": copyToClipboard,
+    "view - display all keywords()": displayAll,
   };
 
   const searchFuncs = {
@@ -130,6 +159,13 @@ export function ContextProvider({ children }) {
     split,
     setTarget,
     setArticle,
+  };
+
+  const updateKeywords = (article, keywords, ...args) => {
+    const newKeywords = processKeywords(article, keywords, ...args);
+    setKeywords(newKeywords);
+    setTotalRenders(totalRenders + 1);
+    return newKeywords;
   };
 
   const exports = {
@@ -145,6 +181,9 @@ export function ContextProvider({ children }) {
     article,
     setArticle,
     searchFuncs,
+    getColor,
+    updateKeywords,
+    totalRenders,
   };
 
   return <AppContext.Provider value={exports}>{children}</AppContext.Provider>;

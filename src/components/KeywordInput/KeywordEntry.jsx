@@ -32,6 +32,11 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import { useAppState } from "@context/AppContext";
 
+const icon1 = <LooksOneIcon fontSize="small" />;
+const icon2 = <LooksTwoIcon fontSize="small" />;
+const icon3 = <Looks3Icon fontSize="small" />;
+const icon4 = <Looks4Icon fontSize="small" />;
+
 const looksIcons = {
   0: <LooksOneIcon fontSize="small" />,
   1: <LooksTwoIcon fontSize="small" />,
@@ -41,6 +46,7 @@ const looksIcons = {
 
 const visibilityIcon = <VisibilityOffIcon fontSize="small" />;
 const xIcon = <ClearRoundedIcon fontSize="small" />;
+// const checkedIcon = <VisibilityIcon fontSize="small" />;
 
 export default function KeywordInput() {
   const appState = useAppState();
@@ -54,6 +60,13 @@ export default function KeywordInput() {
     getColor,
   } = useAppState();
 
+  // const [value, setValue] = useState(keywords);
+  // const [inputValue, setInputValue] = useState("");
+  // const [capture, setCapture] = useState({});
+
+  // const handleChange = () => {
+  //   setValue(keywords.filter(phrase => phrase.count === 0));
+  // };
   const handleClickRenderOptions = (e, v, d, a) => {
     console.log(e, v, d, a);
   };
@@ -64,7 +77,9 @@ export default function KeywordInput() {
 
   const changeHidden = (e, index) => {
     const newKeywords = [...keywords];
+    // console.log(e, index, newKeywords[index]);
     newKeywords[index].hidden = !newKeywords[index].hidden;
+    // newKeywords[index].color = getColor(option);
     setKeywords(newKeywords);
   };
 
@@ -97,6 +112,7 @@ export default function KeywordInput() {
         options={keywords}
         getOptionLabel={(option) => option.name}
         value={keywords}
+        // PopperComponent={<Popper />}
         renderOption={(props, option, { selected }) => (
           <li
             {...props}
@@ -108,6 +124,7 @@ export default function KeywordInput() {
               checkedIcon={xIcon}
               style={{ marginRight: -4 }}
               onClick={(e) => deleteEntry(e, props["data-option-index"])}
+              // checked={true}
             />
             <Checkbox
               icon={looksIcons[option.group]}
@@ -123,6 +140,7 @@ export default function KeywordInput() {
               icon={visibilityIcon}
               checkedIcon={visibilityIcon}
               onClick={(e) => changeHidden(e, props["data-option-index"])}
+              // onDelete={(e) => changeHidden(e, index)}
               style={{ marginRight: 16 }}
               checked={option.hidden}
             />
@@ -135,6 +153,7 @@ export default function KeywordInput() {
               sx={{ minWidth: 300 }}
             >
               <Typography>{option.name}</Typography>
+              {/* {console.log(props)} */}
             </Stack>
           </li>
         )}
@@ -154,7 +173,9 @@ export default function KeywordInput() {
               onDelete={(e) => changeHidden(e, index)}
               deleteIcon={visibilityIcon}
               sx={{ display: option.hidden ? "none" : "flex" }}
-            />
+            >
+              {/* {console.log(option, index, tagValue)} */}
+            </Chip>
           ))
         }
         renderInput={(params) => (
@@ -167,7 +188,8 @@ export default function KeywordInput() {
           />
         )}
       />
-      {/* <pre>{JSON.stringify(keywords, undefined, 1)}</pre> */}
+      <pre>{JSON.stringify(keywords, undefined, 1)}</pre>
+      {/* <pre>{JSON.stringify(inputValue)}</pre> */}
     </>
   );
 }

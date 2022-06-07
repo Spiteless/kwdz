@@ -25,7 +25,7 @@ import Search from "./Search";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({ toggleDrawer }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -145,7 +145,7 @@ export default function PrimarySearchAppBar() {
             aria-label="open drawer"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <MenuIcon onClick={toggleDrawer(true)} />
           </IconButton>
           <Typography
             variant="h6"

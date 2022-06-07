@@ -6,10 +6,28 @@ import { Box, Container } from "@mui/material";
 import KeywordInput from "@components/KeywordInput/KeywordInput";
 import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
+import EdgePanel from "@components/EdgePanel";
 
 // import styles from "@styles/Home.module.css";
 
 export default function Home() {
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return; //Don't do anything on Tab or Shift keypress
+    }
+
+    setDrawerOpen(open);
+    console.log("toggleDrawer", event.type, open);
+  };
+
   return (
     <Container>
       <Head>
@@ -21,13 +39,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.svg" />
       </Head>
 
-      <NavBar />
+      <NavBar toggleDrawer={toggleDrawer} />
+      <EdgePanel mobileOpen={drawerOpen} toggleDrawer={toggleDrawer} />
 
-      <Box as="main" >
-        <Box sx={{my:4}}>
+      <Box as="main">
+        <Box sx={{ my: 4 }}>
           <ArticleInput />
         </Box>
-        <Box sx={{my:4}}>
+        <Box sx={{ my: 4 }}>
           <KeywordInput />
         </Box>
       </Box>

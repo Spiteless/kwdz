@@ -48,15 +48,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Search() {
-  const { searchFuncs } = useAppState();
+  const { searchFuncs, totalRenders } = useAppState();
   const { split, functionNames } = searchFuncs;
 
   const test = Object.keys(functionNames);
-  const menuFunctions = Object.keys(functionNames).map( n => {
-    return {label: n + ": "}
-  })
+  const menuFunctions = Object.keys(functionNames).map((n) => {
+    return { label: n + ": " };
+  });
 
   useHotkeys(
+    // Alt + / focuses SearchInput, sets input to ""
     "alt+/",
     () => {
       document.getElementById("SearchInput").focus();
@@ -86,6 +87,7 @@ export default function Search() {
   };
 
   return (
+    <>
       <Autocomplete
         freeSolo
         clearOnEscape
@@ -97,7 +99,7 @@ export default function Search() {
         inputValue={inputValue}
         onInputChange={handleInputChange}
         renderInput={(params) => (
-          <SearchField ref={params.InputProps.ref} label="Movie">
+          <SearchField ref={params.InputProps.ref} label="Search Menus">
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -113,5 +115,7 @@ export default function Search() {
           </SearchField>
         )}
       />
+      {/* <p>{totalRenders}</p> */}
+    </>
   );
 }
