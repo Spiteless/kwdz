@@ -58,7 +58,7 @@ export default function KeywordInput(props) {
         id="keywordField"
         variant="outlined"
         rows={14}
-        label={"Close sidebar to submit."}
+        label="Add keywords separated by line break."
         // color="secondary"
         keywordEntryRef={keywordEntryRef}
         value={
@@ -88,7 +88,7 @@ export default function KeywordInput(props) {
         }}
         sx={{ mb: 4 }}
       />
-      <Button variant="outlined">Submit!</Button>
+      <Button variant="outlined" onClick={handleSubmit}>Submit!</Button>
     </Stack>
   );
 }
