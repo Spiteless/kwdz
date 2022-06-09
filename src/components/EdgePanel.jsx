@@ -18,8 +18,12 @@ import { useState } from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import Button from "@mui/material/Button";
 import { TextField } from "@material-ui/core";
+import { useAppState } from "@context/AppContext";
 
-function EdgePanel({ toggleDrawer, mobileOpen, window }) {
+import KeywordEntry from "@components/KeywordInput/KeywordEntry";
+
+function EdgePanel({ window }) {
+  const {toggleDrawer, drawerOpen} = useAppState();
   const drawer = (
     <Box
       sx={{
@@ -33,24 +37,13 @@ function EdgePanel({ toggleDrawer, mobileOpen, window }) {
       <List
         sx={{
           flexGrow: 1,
-          minWidth: 300
+          minWidth: 300,
+          display: "flex",
+          justifyContent: "center",
         }}
-        
       >
         <ListItem>
-          <TextField
-            variant="outlined"
-            fullWidth
-            multiline
-            // selected="subMessage"
-            placeholder="enter keywords seperated by linebreak"
-            helperText="Text below main message."
-            label="enter keywords seperated by linebreak"
-            ariaLabel="Choose countdown submessage"
-            rows={8}
-            // sx={{width: 300}}
-            // inputProps={{ width: 500 }}
-          />
+          <KeywordEntry />
         </ListItem>
       </List>
       <List>
@@ -61,7 +54,7 @@ function EdgePanel({ toggleDrawer, mobileOpen, window }) {
             justifyContent: "center",
           }}
         >
-          <DeleteForeverIcon />
+          {/* <DeleteForeverIcon /> */}
         </ListItem>
       </List>
     </Box>
@@ -81,7 +74,7 @@ function EdgePanel({ toggleDrawer, mobileOpen, window }) {
         <Drawer
           container={container}
           variant="temporary"
-          open={mobileOpen}
+          open={drawerOpen}
           onClose={toggleDrawer(false)}
           onOpen={toggleDrawer(true)}
           ModalProps={{

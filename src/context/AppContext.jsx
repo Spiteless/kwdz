@@ -1,8 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 
 import { processKeywords, getColor } from "@lib/processKeywords";
+import { copyToClipboard } from "@lib/clipboard";
 
 const AppContext = React.createContext();
 
@@ -24,10 +26,24 @@ export function ContextProvider({ children }) {
   const [context, setContext] = useState(initialContext);
   const [disabled, setDisabled] = useState(false);
   const [keywords, setKeywords] = useState([]);
-  const [keywordsProcessed, setKeywordsProcessed] = useState([]);
   const [article, setArticle] = useState("");
   const [forceRerender, setForceRerender] = useState(0);
   const [totalRenders, setTotalRenders] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const keywordEntryRef = useRef(null);
+
+  const toggleDrawer = (openState) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return; //Don't do anything on Tab or Shift keypress
+    }
+    setDrawerOpen(openState);
+  };
+
+  const closeDrawer = () => setDrawerOpen(false);
 
   useEffect(() => {
     //Set application state via router from initial load
@@ -41,6 +57,7 @@ export function ContextProvider({ children }) {
   }, [router.isReady]);
 
   useEffect(() => {
+    //main update useEffect for application
     if (router.isReady) {
       updateKeywords(article, keywords);
     }
@@ -74,6 +91,25 @@ export function ContextProvider({ children }) {
 
     updateKeywords("", initialKW);
   }, [router.isReady]);
+
+  function initializeNewKeywords(newKeywordsText, article) {
+    let initialKW = [];
+    let group = newKeywordsText
+      .replace("\r", "")
+      .split("\n")
+      .filter((k) => k.length > 0);
+
+    group.map((k) => {
+      let val = {
+        name: k.toLowerCase(),
+        group: 0,
+        count: 0,
+        hidden: false,
+      };
+      initialKW.push(val);
+    });
+    updateKeywords(article, initialKW);
+  }
 
   function setRouter(state) {
     const queryObj = {};
@@ -114,6 +150,16 @@ export function ContextProvider({ children }) {
     }
   };
 
+  // there is a structural change available here to allow
+  // single properties to be sent with setRouter
+  // so that the application is pulling the last known state
+  // plus the new state that needs handling
+
+  // eg
+  // setRouter(newProperties) {
+  //   let newState = { ... oldState, ...newProperties}
+  // }
+
   const setDueDate = (text) => {
     const newContext = { ...context };
     newContext.dueDate = text;
@@ -128,36 +174,32 @@ export function ContextProvider({ children }) {
     return [func, vals.join(": ")];
   };
 
-  const copyToClipboard = (e) => {
-    let text = "";
-    text = keywordsProcessed
-      .filter((val) => val.count === 0)
-      .map((val) => val.name)
-      .join("\n");
-    text = "%% MISSING WORDS\n" + text + "\n%%";
-    navigator.clipboard.writeText(text);
-    return "Clipboard Set!";
-  };
-
-  const displayAll = () => {
-    const newKeywords = updateKeywords("", keywords, { hidden: false });
-
+  const unhideAll = () => {
+    updateKeywords("", keywords, { hidden: false });
     setForceRerender(forceRerender + 1);
     return "All keywords unhidden!";
   };
 
+  const openKeywordField = () => {
+    setDrawerOpen(true);
+    setTimeout(() => {
+      let f1 = document.getElementById("keywordField").focus();
+      // let f2 = keywordEntryRef.current && keywordEntryRef.current.focus();
+    }, 25);
+  };
+
   const functionNames = {
-    setTarget: setTarget,
-    setDueDate: setDueDate,
-    setArticle: setArticle,
-    "copyMissingToClipboard()": copyToClipboard,
-    "view - display all keywords()": displayAll,
+    "Set target": { func: setTarget },
+    "Set due date": { func: setDueDate },
+    "Set article": { func: setArticle },
+    "Set keywords()": { func: openKeywordField },
+    "Copy missing to clipboard()": { func: copyToClipboard, args: keywords },
+    "View - unhide all keywords()": { func: unhideAll },
   };
 
   const searchFuncs = {
     functionNames,
     split,
-    setTarget,
     setArticle,
   };
 
@@ -176,14 +218,20 @@ export function ContextProvider({ children }) {
     setDisabled,
     keywords,
     setKeywords,
-    keywordsProcessed,
-    setKeywordsProcessed,
     article,
     setArticle,
     searchFuncs,
     getColor,
     updateKeywords,
     totalRenders,
+    initializeNewKeywords,
+    forceRerender,
+    setForceRerender,
+    drawerOpen,
+    setDrawerOpen,
+    toggleDrawer,
+    closeDrawer,
+    keywordEntryRef,
   };
 
   return <AppContext.Provider value={exports}>{children}</AppContext.Provider>;

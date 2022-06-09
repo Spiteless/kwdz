@@ -7,26 +7,12 @@ import KeywordInput from "@components/KeywordInput/KeywordInput";
 import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
 import EdgePanel from "@components/EdgePanel";
+import { useAppState } from "@context/AppContext";
 
 // import styles from "@styles/Home.module.css";
 
 export default function Home() {
-
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const toggleDrawer = (open) => (event) => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return; //Don't do anything on Tab or Shift keypress
-    }
-
-    setDrawerOpen(open);
-    console.log("toggleDrawer", event.type, open);
-  };
+  const { mainRef } = useAppState();
 
   return (
     <Container>
@@ -39,8 +25,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.svg" />
       </Head>
 
-      <NavBar toggleDrawer={toggleDrawer} />
-      <EdgePanel mobileOpen={drawerOpen} toggleDrawer={toggleDrawer} />
+      <NavBar />
+      <EdgePanel />
 
       <Box as="main">
         <Box sx={{ my: 4 }}>

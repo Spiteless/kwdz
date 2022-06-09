@@ -1,8 +1,6 @@
 export function processKeywords(article, phrases, props) {
-  // console.log("processKeywords", phrases, props)
   phrases.map(phrase => {
     if (props) phrase.hidden = props.hidden
-    // console.log(phrase, props)
     let occ = occurrences(article, phrase.name)
     phrase.count = occ
     phrase.color = getColor(phrase)
@@ -26,7 +24,6 @@ export function processKeywords(article, phrases, props) {
     if (a.count > b.count) return 1
     return 0
   })
-  // console.log("processKeywords", phrases)
   return phrases
 }
 

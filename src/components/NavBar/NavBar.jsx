@@ -21,11 +21,15 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 
 import Tooltip from "@mui/material/Tooltip";
 
+import { useAppState } from "@context/AppContext";
+
 import Search from "./Search";
 
 const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 
-export default function PrimarySearchAppBar({ toggleDrawer }) {
+export default function PrimarySearchAppBar({}) {
+  const { toggleDrawer } = useAppState();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -144,8 +148,9 @@ export default function PrimarySearchAppBar({ toggleDrawer }) {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
+            onClick={toggleDrawer(true)}
           >
-            <MenuIcon onClick={toggleDrawer(true)} />
+            <MenuIcon />
           </IconButton>
           <Typography
             variant="h6"

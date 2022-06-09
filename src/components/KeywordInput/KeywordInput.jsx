@@ -55,11 +55,9 @@ export default function KeywordInput() {
   } = useAppState();
 
   const handleClickRenderOptions = (e, v, d, a) => {
-    console.log(e, v, d, a);
   };
 
   const handleDelete = (chipToDelete) => {
-    console.log(chipToDelete);
   };
 
   const changeHidden = (e, index) => {

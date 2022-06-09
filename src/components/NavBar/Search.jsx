@@ -48,10 +48,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Search() {
-  const { searchFuncs, totalRenders } = useAppState();
+  const {
+    searchFuncs,
+    totalRenders,
+    closeDrawer,
+    drawerOpen,
+    //
+  } = useAppState();
   const { split, functionNames } = searchFuncs;
 
-  const test = Object.keys(functionNames);
   const menuFunctions = Object.keys(functionNames).map((n) => {
     return { label: n + ": " };
   });
@@ -60,6 +65,7 @@ export default function Search() {
     // Alt + / focuses SearchInput, sets input to ""
     "alt+/",
     () => {
+      closeDrawer();
       document.getElementById("SearchInput").focus();
       setInputValue("");
     },
@@ -75,8 +81,14 @@ export default function Search() {
 
   const handleAutocompleteSubmit = (e) => {
     e.preventDefault();
-    const [func, argument] = split(inputValue);
-    functionNames[func](argument);
+    const [key, input] = split(inputValue);
+    if (!functionNames.hasOwnProperty(key)) return false;
+    let { func, args } = functionNames[key];
+    if (!func) {
+      return false;
+    }
+    if (args) func(args);
+    if (!args) func(input);
     setInputValue("");
   };
 
@@ -99,7 +111,16 @@ export default function Search() {
         inputValue={inputValue}
         onInputChange={handleInputChange}
         renderInput={(params) => (
-          <SearchField ref={params.InputProps.ref} label="Search Menus">
+          <SearchField
+            ref={params.InputProps.ref}
+            sx={{
+              boxSizing: "border-box",
+              "&:focus-within": {
+                outline: "3px white solid",
+              },
+            }}
+            label="Search Menus"
+          >
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -115,7 +136,7 @@ export default function Search() {
           </SearchField>
         )}
       />
-      {/* <p>{totalRenders}</p> */}
+      {/* <p>{JSON.stringify(drawerOpen, undefined, 2)}</p> */}
     </>
   );
 }
