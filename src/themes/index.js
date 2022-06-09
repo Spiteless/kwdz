@@ -26,7 +26,11 @@ const theme = createTheme({
     },
     light: {
       main: grey[50]
-    }
+    },
+    orange,
+    yellow,
+    green,
+    purple,
   },
   utils: {
     backgroundFocus: ({ ratio, bg, box = 50 }) => (

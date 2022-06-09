@@ -4,13 +4,22 @@ import { TextField } from "@mui/material";
 import { useAppState } from "@context/AppContext";
 
 export default function ArticleInput(props) {
-  const { context, setContext, setDisabled, article, setArticle } =
-    useAppState();
+  const {
+    context,
+    setContext,
+    setKeywords,
+    updateKeywords,
+    setDisabled,
+    article,
+    keywords,
+    setArticle,
+  } = useAppState();
 
   const handleArticleChange = (e) => {
     const newArticleText = cleanString(e.target.value);
     const newContext = { ...context };
     newContext.article = newArticleText;
+    updateKeywords(newArticleText, keywords);
     setArticle(newArticleText);
     setContext(newContext);
     setDisabled(true);

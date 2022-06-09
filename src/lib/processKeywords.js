@@ -1,40 +1,41 @@
-export default function processKeywords(article, phrases) {
-  const output = [];
+export function processKeywords(article, phrases, props) {
   phrases.map(phrase => {
-    const sub = {}
-    sub.count = occurrences(article, phrase)
-    sub.name = phrase.toLowerCase()
-    output.push(sub)
+    if (props) phrase.hidden = props.hidden
+    let occ = occurrences(article, phrase.name)
+    phrase.count = occ
+    phrase.color = getColor(phrase)
+
   })
-  output.sort((a, b) => {
+  //sort by name first
+  phrases.sort((a, b) => {
     if (a.name < b.name) return -1
     if (a.name > b.name) return 1
     return 0
   })
-  output.sort((a, b) => {
+  //sort by number of occurances
+  phrases.sort((a, b) => {
+    if (a.name < b.name) return -1
+    if (a.name > b.name) return 1
+    return 0
+  })
+  //sort by grouping
+  phrases.sort((a, b) => {
     if (a.count < b.count) return -1
     if (a.count > b.count) return 1
     return 0
   })
-
-  return output
+  return phrases
 }
 
-function processKeywordsBACKUP(str, phrases) {
-  const output = [];
-  phrases.map((key) => {
-    output.push([key, occurrences(str.toLowerCase(), key.toLowerCase())]);
-  });
-  output.sort((a, b) => {
-    if (a[0].toLowerCase() < b[0].toLowerCase()) return -1;
-    if (a[0].toLowerCase() > b[0].toLowerCase()) return 1;
-    return 0; ``
-  });
-  output.sort((a, b) => {
-    return a[1] - b[1];
-  });
-  console.log(output)
-  return output;
+export function getColor(phrase) {
+  const colors = {
+    "n": "success",
+    "0": "default",
+    "1": "secondary",
+    "2": "info",
+    "3": "warning",
+  }
+  return (phrase.count > 0) ? colors.n : colors[phrase.group]
 }
 
 function occurrences(string, subString, allowOverlapping = false) {
@@ -55,5 +56,6 @@ function occurrences(string, subString, allowOverlapping = false) {
       pos += step;
     } else break;
   }
+
   return n;
 }
