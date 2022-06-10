@@ -17,6 +17,7 @@ const initialContext = {
   isLoaded: false,
   keywords: {},
   themeColor: "blue",
+  title: "Tracker",
 };
 
 export function ContextProvider({ children }) {
@@ -27,6 +28,7 @@ export function ContextProvider({ children }) {
   const [keywords, setKeywords] = useState([]);
   const [targ, setTarg] = useState(false);
   const [due, setDue] = useState("");
+  const [title, setTitle] = useState("");
 
   const [article, setArticle] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -34,8 +36,6 @@ export function ContextProvider({ children }) {
   const [totalRenders, setTotalRenders] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [wordCount, setWordCount] = useState(0);
-
-  // const keywordEntryRef = useRef(null);
 
   const toggleDrawer = (openState) => (event) => {
     if (
@@ -85,11 +85,10 @@ export function ContextProvider({ children }) {
     if (router.isReady) {
       updateKeywords(article, keywords);
     }
-    console.log("[article, keywords, disabled, forceRerender]");
-  }, [article, keywords, disabled, forceRerender]);
+  }, [article, keywords, disabled, forceRerender, title]);
 
   useEffect(() => {
-    //this useEffect is for setting Router
+    // keep router up to date
     let queryObj = {};
 
     keywords
@@ -138,7 +137,6 @@ export function ContextProvider({ children }) {
         });
       }
     }
-
     updateKeywords("", initialKW);
   }, [router.isReady]);
 
@@ -161,30 +159,9 @@ export function ContextProvider({ children }) {
     updateKeywords(article, initialKW);
   }
 
-  // function setRouter(state) {
-  //   const queryObj = {};
-
-  //   if (state.keywords) {
-  //     let kw = [...state.keywords];
-
-  //     kw.reduce(
-  //       (previousValue, currentValue) => {
-  //         previousValue[currentValue.group].push(currentValue.name);
-  //         return previousValue;
-  //       },
-  //       [[], [], [], []]
-  //     ).map((group, index) => {
-  //       if (group.length > 0) queryObj[`k${index}`] = [...group];
-  //     });
-  //   }
-
-  //   if (state.dueDate) queryObj.due = state.dueDate;
-  //   if (state.target) queryObj.target = state.target;
-
-  //   let query = "/?" + queryString.stringify(queryObj);
-
-  //   router.push(query, undefined, { shallow: true });
-  // }
+  /*
+  ------------------------------
+  */
 
   const setTarget = (text) => {
     const num = parseInt(text);
@@ -194,6 +171,11 @@ export function ContextProvider({ children }) {
     } else {
       return "Target Not Set :(";
     }
+  };
+
+  const setTitle_ = (text) => {
+    setTitle(text);
+    return "Title Set!";
   };
 
   const setDueDate = (text) => {
@@ -222,6 +204,7 @@ export function ContextProvider({ children }) {
   const functionNames = {
     "Set target": { func: setTarget },
     "Set due date": { func: setDueDate },
+    "Set title": { func: setTitle_ },
     "Set article": { func: setArticle },
     "Set keywords()": { func: openKeywordField },
     "Copy missing to clipboard()": { func: copyToClipboard, args: keywords },
@@ -263,7 +246,7 @@ export function ContextProvider({ children }) {
     openDrawer,
     wordCount,
     setWordCount,
-    // keywordEntryRef,
+    title,
   };
 
   return <AppContext.Provider value={exports}>{children}</AppContext.Provider>;
