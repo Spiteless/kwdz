@@ -85,7 +85,7 @@ export function ContextProvider({ children }) {
       updateKeywords(article, keywords);
     }
     console.log("Updated keywords . . .", [article, keywords, disabled, forceRerender, title, router.isReady])
-  }, [article, keywords, disabled, forceRerender, title, router.isReady]);
+  }, [article, keywords, disabled, forceRerender, router.isReady]);
 
   useEffect(() => {
     // keep router up to date
@@ -110,8 +110,8 @@ export function ContextProvider({ children }) {
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
-    console.log("updating Router . . .", query)
-  }, [keywords, targ, due]);
+    console.log("updating Router . . .", router, keywords)
+  }, [keywords, targ, due, title]);
 
   useEffect(() => {
     // create inital keywords array
