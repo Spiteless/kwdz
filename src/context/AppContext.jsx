@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 
@@ -16,7 +15,7 @@ const initialContext = {
   target: false,
   dueDate: "",
   isLoaded: false,
-  article: "",
+  keywords: {},
   themeColor: "blue",
 };
 
@@ -24,13 +23,19 @@ export function ContextProvider({ children }) {
   const router = useRouter();
 
   const [context, setContext] = useState(initialContext);
-  const [disabled, setDisabled] = useState(false);
+
   const [keywords, setKeywords] = useState([]);
+  const [targ, setTarg] = useState(false);
+  const [due, setDue] = useState("");
+
   const [article, setArticle] = useState("");
+  const [disabled, setDisabled] = useState(false);
   const [forceRerender, setForceRerender] = useState(0);
   const [totalRenders, setTotalRenders] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const keywordEntryRef = useRef(null);
+  const [wordCount, setWordCount] = useState(0);
+
+  // const keywordEntryRef = useRef(null);
 
   const toggleDrawer = (openState) => (event) => {
     if (
@@ -43,6 +48,13 @@ export function ContextProvider({ children }) {
     setDrawerOpen(openState);
   };
 
+  const openDrawer = () => {
+    console.log("openDrawer()");
+    setTimeout(() => {
+      document.getElementById("keywordField").focus();
+    }, 25);
+    setDrawerOpen(true);
+  };
   const closeDrawer = () => setDrawerOpen(false);
 
   useEffect(() => {
@@ -53,6 +65,18 @@ export function ContextProvider({ children }) {
     newContext.target = router.query.target || false;
     newContext.dueDate = router.query.due || "";
 
+    if (
+      // open drawer if there are no keywords
+      router.isReady &&
+      !router.query.kw &&
+      !router.query.k0 &&
+      !router.query.k1 &&
+      !router.query.k2 &&
+      !router.query.k3
+    ) {
+      openDrawer();
+    }
+
     setContext(newContext);
   }, [router.isReady]);
 
@@ -61,7 +85,33 @@ export function ContextProvider({ children }) {
     if (router.isReady) {
       updateKeywords(article, keywords);
     }
+    console.log("[article, keywords, disabled, forceRerender]");
   }, [article, keywords, disabled, forceRerender]);
+
+  useEffect(() => {
+    //this useEffect is for setting Router
+    let queryObj = {};
+
+    keywords
+      .reduce(
+        (previousValue, currentValue) => {
+          previousValue[currentValue.group].push(currentValue.name);
+          return previousValue;
+        },
+        [[], [], [], []]
+      )
+      .map((group, index) => {
+        if (group.length > 0 && group[0]) {
+          queryObj[`k${index}`] = [...group];
+        }
+      });
+
+    if (due) queryObj.due = due;
+    if (targ) queryObj.target = targ;
+
+    let query = "/?" + queryString.stringify(queryObj);
+    router.push(query, undefined, { shallow: true });
+  }, [keywords, targ, due]);
 
   useEffect(() => {
     // create inital keywords array
@@ -92,7 +142,7 @@ export function ContextProvider({ children }) {
     updateKeywords("", initialKW);
   }, [router.isReady]);
 
-  function initializeNewKeywords(newKeywordsText, article) {
+  function createNewKeywords(newKeywordsText, article) {
     let initialKW = [];
     let group = newKeywordsText
       .replace("\r", "")
@@ -111,61 +161,43 @@ export function ContextProvider({ children }) {
     updateKeywords(article, initialKW);
   }
 
-  function setRouter(state) {
-    const queryObj = {};
+  // function setRouter(state) {
+  //   const queryObj = {};
 
-    if (state.keywords) {
-      let kw = [...state.keywords];
+  //   if (state.keywords) {
+  //     let kw = [...state.keywords];
 
-      kw.reduce(
-        (previousValue, currentValue) => {
-          previousValue[currentValue.group].push(currentValue.name);
-          return previousValue;
-        },
-        [[], [], [], []]
-      ).map((group, index) => {
-        if (group.length > 0) queryObj[`k${index}`] = [...group];
-      });
-    }
+  //     kw.reduce(
+  //       (previousValue, currentValue) => {
+  //         previousValue[currentValue.group].push(currentValue.name);
+  //         return previousValue;
+  //       },
+  //       [[], [], [], []]
+  //     ).map((group, index) => {
+  //       if (group.length > 0) queryObj[`k${index}`] = [...group];
+  //     });
+  //   }
 
-    if (state.dueDate) queryObj.due = state.dueDate;
-    if (state.target) queryObj.target = state.target;
+  //   if (state.dueDate) queryObj.due = state.dueDate;
+  //   if (state.target) queryObj.target = state.target;
 
-    let query = "/?" + queryString.stringify(queryObj);
+  //   let query = "/?" + queryString.stringify(queryObj);
 
-    router.push(query, undefined, { shallow: true });
-  }
+  //   router.push(query, undefined, { shallow: true });
+  // }
 
   const setTarget = (text) => {
     const num = parseInt(text);
     if (Number.isInteger(num)) {
-      const newContext = { ...context };
-      newContext.target = num;
-      newContext.keywords = keywords;
-      setRouter(newContext);
-      setContext(newContext);
+      setTarg(num);
       return "Target Set!";
     } else {
       return "Target Not Set :(";
     }
   };
 
-  // there is a structural change available here to allow
-  // single properties to be sent with setRouter
-  // so that the application is pulling the last known state
-  // plus the new state that needs handling
-
-  // eg
-  // setRouter(newProperties) {
-  //   let newState = { ... oldState, ...newProperties}
-  // }
-
   const setDueDate = (text) => {
-    const newContext = { ...context };
-    newContext.dueDate = text;
-    setRouter(newContext);
-    setContext(newContext);
-
+    setDue(text);
     return "DueDate Set!";
   };
 
@@ -183,8 +215,7 @@ export function ContextProvider({ children }) {
   const openKeywordField = () => {
     setDrawerOpen(true);
     setTimeout(() => {
-      let f1 = document.getElementById("keywordField").focus();
-      // let f2 = keywordEntryRef.current && keywordEntryRef.current.focus();
+      document.getElementById("keywordField").focus();
     }, 25);
   };
 
@@ -200,7 +231,6 @@ export function ContextProvider({ children }) {
   const searchFuncs = {
     functionNames,
     split,
-    setArticle,
   };
 
   const updateKeywords = (article, keywords, ...args) => {
@@ -213,7 +243,6 @@ export function ContextProvider({ children }) {
   const exports = {
     context,
     setContext,
-    setRouter,
     disabled,
     setDisabled,
     keywords,
@@ -224,14 +253,17 @@ export function ContextProvider({ children }) {
     getColor,
     updateKeywords,
     totalRenders,
-    initializeNewKeywords,
+    createNewKeywords,
     forceRerender,
     setForceRerender,
     drawerOpen,
     setDrawerOpen,
     toggleDrawer,
     closeDrawer,
-    keywordEntryRef,
+    openDrawer,
+    wordCount,
+    setWordCount,
+    // keywordEntryRef,
   };
 
   return <AppContext.Provider value={exports}>{children}</AppContext.Provider>;
