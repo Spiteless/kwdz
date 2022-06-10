@@ -1,37 +1,26 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import {
   TextField,
   Button,
-  ButtonGroup,
-  FormControl,
   InputAdornment,
   IconButton,
   Stack,
 } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 
 import { useAppState } from "@context/AppContext";
-import { Box } from "@mui/system";
-import { SearchOutlined } from "@material-ui/icons";
-import SendIcon from "@mui/icons-material/Send";
-import { SendAndArchiveOutlined } from "@mui/icons-material";
 
 export default function KeywordInput(props) {
-  const appState = useAppState();
   const {
-    context,
-    setContext,
     keywords,
-    setKeywords,
-    setRouter,
     setDisabled,
     disabled,
-    initializeNewKeywords,
+    createNewKeywords,
     article,
     forceRerender,
     setForceRerender,
-    toggleDrawer,
-    keywordEntryRef,
+    closeDrawer,
+    // keywordEntryRef,
   } = useAppState();
 
   const [wordsText, setWordsText] = useState([]);
@@ -44,8 +33,8 @@ export default function KeywordInput(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    initializeNewKeywords(wordsText, article);
-    toggleDrawer(false);
+    createNewKeywords(wordsText, article);
+    closeDrawer();
     setForceRerender(forceRerender + 1);
   };
 
@@ -60,7 +49,7 @@ export default function KeywordInput(props) {
         rows={14}
         label="Add keywords separated by line break."
         // color="secondary"
-        keywordEntryRef={keywordEntryRef}
+        // keywordEntryRef={keywordEntryRef}
         value={
           disabled
             ? // ? keywordsProcessed.map((item) => `${item[1]} ${item[0]}`).join("\n")
@@ -72,10 +61,6 @@ export default function KeywordInput(props) {
         onFocus={() => {
           setDisabled(false);
         }}
-        // onBlur={(e) => {
-        //   handleSubmit(e);
-        //   setDisabled(true);
-        // }}
         InputProps={{
           sx: { minWidth: 300 },
           endAdornment: (
@@ -88,7 +73,9 @@ export default function KeywordInput(props) {
         }}
         sx={{ mb: 4 }}
       />
-      <Button variant="outlined" onClick={handleSubmit}>Submit!</Button>
+      <Button variant="outlined" onClick={handleSubmit}>
+        Submit!
+      </Button>
     </Stack>
   );
 }

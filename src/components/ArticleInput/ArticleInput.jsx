@@ -1,55 +1,50 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { TextField } from "@mui/material";
+import { useState, useCallback, useRef } from "react";
+import { debounce } from "@mui/material";
+import { TextField, InputAdornment } from "@mui/material";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+import SendIcon from "@mui/icons-material/Send";
+import CheckIcon from "@mui/icons-material/Check";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import { useAppState } from "@context/AppContext";
+import { clean, countWords } from "@lib/processKeywords";
 
 export default function ArticleInput(props) {
   const {
     context,
-    setContext,
-    setKeywords,
-    updateKeywords,
     setDisabled,
     article,
-    keywords,
     setArticle,
+    wordCount,
+    setWordCount,
+    //
   } = useAppState();
 
-  const handleArticleChange = (e) => {
-    const newArticleText = cleanString(e.target.value);
-    const newContext = { ...context };
-    newContext.article = newArticleText;
-    updateKeywords(newArticleText, keywords);
-    setArticle(newArticleText);
-    setContext(newContext);
+  const [loading, setLoading] = useState(false);
+  const [localArticle, setLocalArticle] = useState("");
+
+  const doneLoading = () => setLoading(false);
+  const isLoading = () => setLoading(true);
+
+  const submitArticle = (text) => {
+    setArticle(text);
     setDisabled(true);
+    setWordCount(countWords(text))
+    doneLoading();
   };
 
-  const getWordsByWordBoundaries = (str) => {
-    return extractSubstr(str, /\b[a-z\d]+\b/g);
+
+  const debouncedCallback = useCallback(debounce(text => submitArticle(text), 350), []);
+
+  const handleArticleChange = (e) => {
+    const newArticleText = clean(e.target.value);
+    isLoading();
+    setLocalArticle(newArticleText);
+    debouncedCallback(newArticleText);
   };
 
-  const extractSubstr = (str, regexp) => {
-    return cleanString(str).match(regexp) || [];
-  };
-
-  const cleanString = (str) => {
-    return (
-      str
-        .replace(/%%(.|\n)*%%/gm, "")
-        //select everything between double-percent signs and remove it
-        .replace(/[^\w\s]|_/g, "")
-        .replace(/\s+/g, " ") //replace whitespace characters with ' '
-        .replace(/-|'/gm, " ") //remove dashes and apostrophes
-        .toLowerCase()
-    );
-  };
-
-  const countWordsInArticle = (str) => {
-    return getWordsByWordBoundaries(str).length;
-  };
-
-  let textLabel = `Word Count: ${countWordsInArticle(article)}`;
+  let textLabel = `Word Count: ${wordCount}`;
   if (context.target) {
     textLabel += `/${context.target}`;
   }
@@ -60,9 +55,20 @@ export default function ArticleInput(props) {
   return (
     <TextField
       sx={{}}
-      inputProps={{}}
+      InputProps={{
+        // sx: { minWidth: 300 },
+        endAdornment: (
+          <InputAdornment position="end">
+            {loading ? (
+              <CircularProgress size={20} />
+            ) : (
+              <CheckIcon size="large" color="success" />
+            )}
+          </InputAdornment>
+        ),
+      }}
       name="article"
-      value={article}
+      value={localArticle}
       id="article"
       label={textLabel}
       placeholder="Paste article text here."

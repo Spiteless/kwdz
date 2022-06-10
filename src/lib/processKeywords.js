@@ -1,4 +1,4 @@
-export function processKeywords(article, phrases, props) {
+function processKeywords(article, phrases, props) {
   phrases.map(phrase => {
     if (props) phrase.hidden = props.hidden
     let occ = occurrences(article, phrase.name)
@@ -58,4 +58,38 @@ function occurrences(string, subString, allowOverlapping = false) {
   }
 
   return n;
+}
+
+
+const countWords = (str) => {
+  return getWordsByWordBoundaries(str).length;
+};
+
+const getWordsByWordBoundaries = (str) => {
+  return extractSubstr(str, /\b[a-z\d]+\b/g);
+};
+
+const extractSubstr = (str, regexp) => {
+  return clean(str).match(regexp) || [];
+};
+
+const clean = (str) => {
+
+  return (str
+    .replace(/%%(.|\n)*%%/gm, "")
+    //select everything between double-percent signs and remove it
+    .replace(/[^\w\s]|_/g, "")
+    .replace(/\s+/g, " ") //replace whitespace characters with ' '
+    .replace(/-|'/gm, " ") //remove dashes and apostrophes
+    .toLowerCase()
+  );
+};
+
+module.exports = {
+  processKeywords,
+  getColor,
+  clean,
+  countWords,
+  getWordsByWordBoundaries,
+  extractSubstr
 }

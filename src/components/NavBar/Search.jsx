@@ -62,7 +62,7 @@ export default function Search() {
   });
 
   useHotkeys(
-    // Alt + / focuses SearchInput, sets input to ""
+    // Alt + / focuses SearchInput, clears input field
     "alt+/",
     () => {
       closeDrawer();
@@ -99,44 +99,41 @@ export default function Search() {
   };
 
   return (
-    <>
-      <Autocomplete
-        freeSolo
-        clearOnEscape
-        autoHighlight
-        id="combo-search-field"
-        options={menuFunctions}
-        sx={{ width: 300 }}
-        onSubmit={(e) => handleAutocompleteSubmit(e)}
-        inputValue={inputValue}
-        onInputChange={handleInputChange}
-        renderInput={(params) => (
-          <SearchField
-            ref={params.InputProps.ref}
-            sx={{
-              boxSizing: "border-box",
-              "&:focus-within": {
-                outline: "3px white solid",
-              },
+    <Autocomplete
+      freeSolo
+      clearOnEscape
+      autoHighlight
+      id="combo-search-field"
+      options={menuFunctions}
+      sx={{ width: 300 }}
+      onSubmit={(e) => handleAutocompleteSubmit(e)}
+      inputValue={inputValue}
+      onInputChange={handleInputChange}
+      renderInput={(params) => (
+        <SearchField
+          ref={params.InputProps.ref}
+          sx={{
+            boxSizing: "border-box",
+            "&:focus-within": {
+              outline: "3px white solid",
+            },
+          }}
+          label="Search Menus"
+        >
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search menus (Alt + /)"
+            inputProps={{
+              "aria-label": "search",
+              ...params.inputProps,
+              id: "SearchInput",
+              onSubmit: (e) => handleSubmit(e),
             }}
-            label="Search Menus"
-          >
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search menus (Alt + /)"
-              inputProps={{
-                "aria-label": "search",
-                ...params.inputProps,
-                id: "SearchInput",
-                onSubmit: (e) => handleSubmit(e),
-              }}
-            />
-          </SearchField>
-        )}
-      />
-      {/* <p>{JSON.stringify(drawerOpen, undefined, 2)}</p> */}
-    </>
+          />
+        </SearchField>
+      )}
+    />
   );
 }

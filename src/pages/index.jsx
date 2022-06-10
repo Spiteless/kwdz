@@ -1,19 +1,12 @@
-import { useState, useEffect } from "react";
 import Head from "next/head";
-
 import { Box, Container } from "@mui/material";
 
 import KeywordInput from "@components/KeywordInput/KeywordInput";
 import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
-import EdgePanel from "@components/EdgePanel";
-import { useAppState } from "@context/AppContext";
-
-// import styles from "@styles/Home.module.css";
+import EdgePanel from "@components/EdgePanel/EdgePanel";
 
 export default function Home() {
-  const { mainRef } = useAppState();
-
   return (
     <Container>
       <Head>
