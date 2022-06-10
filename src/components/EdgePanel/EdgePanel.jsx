@@ -76,7 +76,7 @@ function EdgePanel({ window }) {
           variant="temporary"
           open={drawerOpen}
           onClose={toggleDrawer(false)}
-          onOpen={toggleDrawer(true)}
+          // onOpen={toggleDrawer(true)}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
