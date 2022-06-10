@@ -49,7 +49,6 @@ export function ContextProvider({ children }) {
   };
 
   const openDrawer = () => {
-    console.log("openDrawer()");
     setTimeout(() => {
       document.getElementById("keywordField").focus();
     }, 25);
@@ -85,7 +84,8 @@ export function ContextProvider({ children }) {
     if (router.isReady) {
       updateKeywords(article, keywords);
     }
-  }, [article, keywords, disabled, forceRerender, title]);
+    console.log("Updated keywords . . .", [article, keywords, disabled, forceRerender, title, router.isReady])
+  }, [article, keywords, disabled, forceRerender, title, router.isReady]);
 
   useEffect(() => {
     // keep router up to date
@@ -110,6 +110,7 @@ export function ContextProvider({ children }) {
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
+    console.log("updating Router . . .", query)
   }, [keywords, targ, due]);
 
   useEffect(() => {
