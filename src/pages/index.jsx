@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Box, Container } from "@mui/material";
 
-import KeywordInput from "@components/KeywordInput/KeywordInput";
+import KeywordInput from "@components/KeywordInput/KeywordDisplay";
 import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
 import EdgePanel from "@components/EdgePanel/EdgePanel";
