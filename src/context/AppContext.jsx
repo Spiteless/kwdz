@@ -75,7 +75,6 @@ export function ContextProvider({ children }) {
     ) {
       openDrawer();
     }
-    // console.log("[router.isReady]", newContext);
     setContext(newContext);
   }, [router.isReady]);
 
@@ -84,7 +83,6 @@ export function ContextProvider({ children }) {
     let newKeywords;
     if (router.isReady) {
       newKeywords = updateKeywords(article, keywords);
-      // console.log("Updated keywords . . .", newKeywords);
     }
   }, [article, keywords, disabled, forceRerender, router.isReady]);
 
@@ -111,28 +109,19 @@ export function ContextProvider({ children }) {
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
-    // console.log("updating Router . . .", query, queryObj, router);
   }, [keywords, targ, due, title]);
 
   useEffect(() => {
     // create inital keywords array
     let initialKW = [];
     const names = { kw: 0, k0: 0, k1: 1, k2: 2, k3: 3 };
-    const { query } = router;
-    console.log(query, router, [
-      "kw" in query,
-      "k0" in query,
-      "k1" in query,
-      "k2" in query,
-      "k3" in query,
-    ]);
 
-    let initial = queryString.parse(router.asPath.replace("/?",""))
+    let parsed = queryString.parse(router.asPath.replace("/?",""))
 
     for (const kw in names) {
       //if router.query[kw] exists
-      if (!!initial[kw]) {
-        let group = initial[kw];
+      if (!!parsed[kw]) {
+        let group = parsed[kw];
         let tag = names[kw];
         if (typeof group === "string") {
           group = [group];
@@ -151,12 +140,6 @@ export function ContextProvider({ children }) {
     let resultInitialKw;
     if (initialKW) {
       resultInitialKw = updateKeywords("", initialKW);
-      console.log(
-        "// create inital keywords array -- router.isReady",
-        initialKW,
-        resultInitialKw,
-        initial
-      );
     }
   }, [router.isReady]);
 
@@ -241,11 +224,6 @@ export function ContextProvider({ children }) {
     setKeywords(newKeywords);
     setTotalRenders(totalRenders + 1);
 
-    // console.log(
-    //   "updateKeywords",
-    //   [!!article, !!keywords, !!newKeywords],
-    //   [article, keywords, newKeywords]
-    // );
     return newKeywords;
   };
 
