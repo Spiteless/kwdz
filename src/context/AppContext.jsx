@@ -75,16 +75,24 @@ export function ContextProvider({ children }) {
     ) {
       openDrawer();
     }
-
+    console.log("First run -- [router.isReady]", newContext);
     setContext(newContext);
   }, [router.isReady]);
 
   useEffect(() => {
     //main update useEffect for application
+    let newKeywords;
     if (router.isReady) {
-      updateKeywords(article, keywords);
+      newKeywords = updateKeywords(article, keywords);
+      console.log("Updated keywords . . .", newKeywords, [
+        article,
+        keywords,
+        disabled,
+        forceRerender,
+        title,
+        router.isReady,
+      ]);
     }
-    console.log("Updated keywords . . .", [article, keywords, disabled, forceRerender, title, router.isReady])
   }, [article, keywords, disabled, forceRerender, router.isReady]);
 
   useEffect(() => {
@@ -110,7 +118,7 @@ export function ContextProvider({ children }) {
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
-    console.log("updating Router . . .", router, keywords)
+    console.log("updating Router . . .", query, queryObj, router);
   }, [keywords, targ, due, title]);
 
   useEffect(() => {
@@ -138,7 +146,15 @@ export function ContextProvider({ children }) {
         });
       }
     }
-    updateKeywords("", initialKW);
+    let resultInitialKw;
+    if (initialKW) {
+      resultInitialKw = updateKeywords("", initialKW);
+      console.log(
+        "// create inital keywords array -- router.isReady",
+        initialKW,
+        resultInitialKw
+      );
+    }
   }, [router.isReady]);
 
   function createNewKeywords(newKeywordsText, article) {
@@ -218,10 +234,14 @@ export function ContextProvider({ children }) {
   };
 
   const updateKeywords = (article, keywords, ...args) => {
-    console.log("updateKeywords", newKeywords)
     const newKeywords = processKeywords(article, keywords, ...args);
     setKeywords(newKeywords);
     setTotalRenders(totalRenders + 1);
+    console.log(
+      "updateKeywords",
+      [!!article, !!keywords, !!newKeywords],
+      [article, keywords, newKeywords]
+    );
     return newKeywords;
   };
 
