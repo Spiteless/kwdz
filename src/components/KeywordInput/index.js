@@ -1,1 +1,1 @@
-export { default } from './KeywordInput.jsx'
+export { default } from './KeywordDisplay.jsx'

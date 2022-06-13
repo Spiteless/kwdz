@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 
@@ -33,7 +33,7 @@ export function ContextProvider({ children }) {
   const [article, setArticle] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [forceRerender, setForceRerender] = useState(0);
-  const [totalRenders, setTotalRenders] = useState(0);
+  const [updateRouter, setUpdateRouter] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [wordCount, setWordCount] = useState(0);
 
@@ -76,6 +76,41 @@ export function ContextProvider({ children }) {
       openDrawer();
     }
     setContext(newContext);
+
+    // create inital keywords array
+    let initialKW = [];
+    const names = { kw: 0, k0: 0, k1: 1, k2: 2, k3: 3 };
+
+    let parsed = queryString.parse(router.asPath.replace("/?", ""));
+
+    for (const kw in names) {
+      //if router.query[kw] exists
+      if (!!parsed[kw]) {
+        let group = parsed[kw];
+        let tag = names[kw];
+        if (typeof group === "string") {
+          group = [group];
+        }
+        group.map((k) => {
+          let val = {
+            name: k.toLowerCase(),
+            group: tag,
+            count: 0,
+            hidden: false,
+          };
+          initialKW.push(val);
+        });
+      }
+    }
+
+    if (parsed.due) setDue_(parsed.due)
+    if (parsed.target) setTarget_(parsed.target);
+    if (parsed.title) setTitle_(parsed.title)
+
+    let resultInitialKw;
+    if (initialKW) {
+      resultInitialKw = updateKeywords("", initialKW);
+    }
   }, [router.isReady]);
 
   useEffect(() => {
@@ -106,42 +141,11 @@ export function ContextProvider({ children }) {
 
     if (due) queryObj.due = due;
     if (targ) queryObj.target = targ;
+    if (title) queryObj.title = title;
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
-  }, [keywords, targ, due, title]);
-
-  useEffect(() => {
-    // create inital keywords array
-    let initialKW = [];
-    const names = { kw: 0, k0: 0, k1: 1, k2: 2, k3: 3 };
-
-    let parsed = queryString.parse(router.asPath.replace("/?",""))
-
-    for (const kw in names) {
-      //if router.query[kw] exists
-      if (!!parsed[kw]) {
-        let group = parsed[kw];
-        let tag = names[kw];
-        if (typeof group === "string") {
-          group = [group];
-        }
-        group.map((k) => {
-          let val = {
-            name: k.toLowerCase(),
-            group: tag,
-            count: 0,
-            hidden: false,
-          };
-          initialKW.push(val);
-        });
-      }
-    }
-    let resultInitialKw;
-    if (initialKW) {
-      resultInitialKw = updateKeywords("", initialKW);
-    }
-  }, [router.isReady]);
+  }, [updateRouter]);
 
   function createNewKeywords(newKeywordsText, article) {
     let initialKW = [];
@@ -166,10 +170,11 @@ export function ContextProvider({ children }) {
   ------------------------------
   */
 
-  const setTarget = (text) => {
+  const setTarget_ = (text) => {
     const num = parseInt(text);
     if (Number.isInteger(num)) {
       setTarg(num);
+      setUpdateRouter(updateRouter + 1)
       return "Target Set!";
     } else {
       return "Target Not Set :(";
@@ -178,11 +183,19 @@ export function ContextProvider({ children }) {
 
   const setTitle_ = (text) => {
     setTitle(text);
+    setUpdateRouter(updateRouter + 1)
     return "Title Set!";
   };
 
-  const setDueDate = (text) => {
+  const setArticle_ = (text) => {
+    setArticle(text);
+    setForceRerender(forceRerender + 1);
+    return "Article Set!";
+  };
+
+  const setDue_ = (text) => {
     setDue(text);
+    setUpdateRouter(updateRouter + 1)
     return "DueDate Set!";
   };
 
@@ -205,10 +218,10 @@ export function ContextProvider({ children }) {
   };
 
   const functionNames = {
-    "Set target": { func: setTarget },
-    "Set due date": { func: setDueDate },
+    "Set target": { func: setTarget_ },
+    "Set due date": { func: setDue_ },
     "Set title": { func: setTitle_ },
-    "Set article": { func: setArticle },
+    "Set article": { func: setArticle_ },
     "Set keywords()": { func: openKeywordField },
     "Copy missing to clipboard()": { func: copyToClipboard, args: keywords },
     "View - unhide all keywords()": { func: unhideAll },
@@ -222,7 +235,7 @@ export function ContextProvider({ children }) {
   const updateKeywords = (article, keywords, ...args) => {
     const newKeywords = processKeywords(article, keywords, ...args);
     setKeywords(newKeywords);
-    setTotalRenders(totalRenders + 1);
+    setUpdateRouter(updateRouter + 1)
 
     return newKeywords;
   };
@@ -239,7 +252,6 @@ export function ContextProvider({ children }) {
     searchFuncs,
     getColor,
     updateKeywords,
-    totalRenders,
     createNewKeywords,
     forceRerender,
     setForceRerender,
@@ -251,6 +263,8 @@ export function ContextProvider({ children }) {
     wordCount,
     setWordCount,
     title,
+    targ,
+    due,
   };
 
   return <AppContext.Provider value={exports}>{children}</AppContext.Provider>;
