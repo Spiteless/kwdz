@@ -102,6 +102,11 @@ export function ContextProvider({ children }) {
         });
       }
     }
+
+    if (parsed.due) setDue_(parsed.due)
+    if (parsed.target) setTarget_(parsed.target);
+    if (parsed.title) setTitle_(parsed.title)
+
     let resultInitialKw;
     if (initialKW) {
       resultInitialKw = updateKeywords("", initialKW);
@@ -136,6 +141,7 @@ export function ContextProvider({ children }) {
 
     if (due) queryObj.due = due;
     if (targ) queryObj.target = targ;
+    if (title) queryObj.title = title;
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
@@ -164,7 +170,7 @@ export function ContextProvider({ children }) {
   ------------------------------
   */
 
-  const setTarget = (text) => {
+  const setTarget_ = (text) => {
     const num = parseInt(text);
     if (Number.isInteger(num)) {
       setTarg(num);
@@ -187,7 +193,7 @@ export function ContextProvider({ children }) {
     return "Article Set!";
   };
 
-  const setDueDate = (text) => {
+  const setDue_ = (text) => {
     setDue(text);
     setUpdateRouter(updateRouter + 1)
     return "DueDate Set!";
@@ -212,8 +218,8 @@ export function ContextProvider({ children }) {
   };
 
   const functionNames = {
-    "Set target": { func: setTarget },
-    "Set due date": { func: setDueDate },
+    "Set target": { func: setTarget_ },
+    "Set due date": { func: setDue_ },
     "Set title": { func: setTitle_ },
     "Set article": { func: setArticle_ },
     "Set keywords()": { func: openKeywordField },
