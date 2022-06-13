@@ -118,19 +118,21 @@ export function ContextProvider({ children }) {
     // create inital keywords array
     let initialKW = [];
     const names = { kw: 0, k0: 0, k1: 1, k2: 2, k3: 3 };
-    const { query } = router.query;
+    const { query } = router;
     console.log(query, router, [
-      "kw" in router.query,
-      "k0" in router.query,
-      "k1" in router.query,
-      "k2" in router.query,
-      "k3" in router.query,
+      "kw" in query,
+      "k0" in query,
+      "k1" in query,
+      "k2" in query,
+      "k3" in query,
     ]);
+
+    let initial = queryString.parse(router.asPath.replace("/?",""))
 
     for (const kw in names) {
       //if router.query[kw] exists
-      if (!!router.query[kw]) {
-        let group = router.query[kw];
+      if (!!initial[kw]) {
+        let group = initial[kw];
         let tag = names[kw];
         if (typeof group === "string") {
           group = [group];
@@ -149,11 +151,12 @@ export function ContextProvider({ children }) {
     let resultInitialKw;
     if (initialKW) {
       resultInitialKw = updateKeywords("", initialKW);
-      // console.log(
-      //   "// create inital keywords array -- router.isReady",
-      //   initialKW,
-      //   resultInitialKw
-      // );
+      console.log(
+        "// create inital keywords array -- router.isReady",
+        initialKW,
+        resultInitialKw,
+        initial
+      );
     }
   }, [router.isReady]);
 
