@@ -75,7 +75,7 @@ export function ContextProvider({ children }) {
     ) {
       openDrawer();
     }
-    console.log("First run -- [router.isReady]", newContext);
+    console.log("[router.isReady]", newContext);
     setContext(newContext);
   }, [router.isReady]);
 
@@ -84,14 +84,7 @@ export function ContextProvider({ children }) {
     let newKeywords;
     if (router.isReady) {
       newKeywords = updateKeywords(article, keywords);
-      console.log("Updated keywords . . .", newKeywords, [
-        article,
-        keywords,
-        disabled,
-        forceRerender,
-        title,
-        router.isReady,
-      ]);
+      console.log("Updated keywords . . .", newKeywords);
     }
   }, [article, keywords, disabled, forceRerender, router.isReady]);
 
@@ -237,6 +230,7 @@ export function ContextProvider({ children }) {
     const newKeywords = processKeywords(article, keywords, ...args);
     setKeywords(newKeywords);
     setTotalRenders(totalRenders + 1);
+
     console.log(
       "updateKeywords",
       [!!article, !!keywords, !!newKeywords],
