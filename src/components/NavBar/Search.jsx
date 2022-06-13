@@ -50,9 +50,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Search() {
   const {
     searchFuncs,
-    totalRenders,
     closeDrawer,
-    drawerOpen,
     //
   } = useAppState();
   const { split, functionNames } = searchFuncs;
@@ -109,6 +107,11 @@ export default function Search() {
       onSubmit={(e) => handleAutocompleteSubmit(e)}
       inputValue={inputValue}
       onInputChange={handleInputChange}
+      componentsProps={{
+        paper: {
+          border: "2px red solid",
+        },
+      }}
       renderInput={(params) => (
         <SearchField
           ref={params.InputProps.ref}

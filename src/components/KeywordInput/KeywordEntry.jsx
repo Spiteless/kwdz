@@ -10,7 +10,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 import { useAppState } from "@context/AppContext";
 
-export default function KeywordInput(props) {
+export default function KeywordInput({}) {
   const {
     keywords,
     setDisabled,
@@ -20,7 +20,6 @@ export default function KeywordInput(props) {
     forceRerender,
     setForceRerender,
     closeDrawer,
-    // keywordEntryRef,
   } = useAppState();
 
   const [wordsText, setWordsText] = useState([]);
@@ -48,15 +47,7 @@ export default function KeywordInput(props) {
         variant="outlined"
         rows={14}
         label="Add keywords separated by line break."
-        // color="secondary"
-        // keywordEntryRef={keywordEntryRef}
-        value={
-          disabled
-            ? // ? keywordsProcessed.map((item) => `${item[1]} ${item[0]}`).join("\n")
-              wordsText
-            : // : keywords.text
-              wordsText
-        }
+        value={wordsText}
         onChange={(e) => handleChange(e)}
         onFocus={() => {
           setDisabled(false);
