@@ -15,7 +15,7 @@ const initialContext = {
   target: false,
   dueDate: "",
   isLoaded: false,
-  keywords: {},
+  keywords: [],
   themeColor: "blue",
   title: "Tracker",
 };
@@ -49,7 +49,6 @@ export function ContextProvider({ children }) {
   };
 
   const openDrawer = () => {
-    console.log("openDrawer()");
     setTimeout(() => {
       document.getElementById("keywordField").focus();
     }, 25);
@@ -76,16 +75,16 @@ export function ContextProvider({ children }) {
     ) {
       openDrawer();
     }
-
     setContext(newContext);
   }, [router.isReady]);
 
   useEffect(() => {
     //main update useEffect for application
+    let newKeywords;
     if (router.isReady) {
-      updateKeywords(article, keywords);
+      newKeywords = updateKeywords(article, keywords);
     }
-  }, [article, keywords, disabled, forceRerender, title]);
+  }, [article, keywords, disabled, forceRerender, router.isReady]);
 
   useEffect(() => {
     // keep router up to date
@@ -110,18 +109,19 @@ export function ContextProvider({ children }) {
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
-  }, [keywords, targ, due]);
+  }, [keywords, targ, due, title]);
 
   useEffect(() => {
     // create inital keywords array
     let initialKW = [];
     const names = { kw: 0, k0: 0, k1: 1, k2: 2, k3: 3 };
-    const query = router.query;
+
+    let parsed = queryString.parse(router.asPath.replace("/?",""))
 
     for (const kw in names) {
       //if router.query[kw] exists
-      if (!!router.query[kw]) {
-        let group = router.query[kw];
+      if (!!parsed[kw]) {
+        let group = parsed[kw];
         let tag = names[kw];
         if (typeof group === "string") {
           group = [group];
@@ -137,7 +137,10 @@ export function ContextProvider({ children }) {
         });
       }
     }
-    updateKeywords("", initialKW);
+    let resultInitialKw;
+    if (initialKW) {
+      resultInitialKw = updateKeywords("", initialKW);
+    }
   }, [router.isReady]);
 
   function createNewKeywords(newKeywordsText, article) {
@@ -220,6 +223,7 @@ export function ContextProvider({ children }) {
     const newKeywords = processKeywords(article, keywords, ...args);
     setKeywords(newKeywords);
     setTotalRenders(totalRenders + 1);
+
     return newKeywords;
   };
 
