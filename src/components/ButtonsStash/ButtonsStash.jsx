@@ -1,6 +1,5 @@
 import React from 'react'
-import { ButtonGroup } from '@material-ui/core';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 
 export default ButtonsStash() {
   const appState = useAppState();
