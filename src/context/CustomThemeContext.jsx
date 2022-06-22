@@ -11,7 +11,7 @@ export function useThemeContext() {
 export default function ThemeContext({ children }) {
   let currentTheme = getTheme(0);
   const [activeTheme, setActiveTheme] = useState(currentTheme);
-  const [num, setNum] = useState(0);
+  const [num, setNum] = useState(1);
 
   const toggleTheme = (theme) => {
     let nextTheme;
@@ -23,6 +23,7 @@ export default function ThemeContext({ children }) {
       setNum(num + 1);
     }
     if (nextTheme) setActiveTheme(nextTheme);
+    console.log(theme, `oldNum: ${num}, newNum: ${num+1}, calc: ${num % themes.count} `, activeTheme.name)
 
   };
 

@@ -140,7 +140,8 @@ export function ContextProvider({ children }) {
         }
       });
 
-    if (activeTheme) queryObj.theme = activeTheme.name;
+    if (activeTheme) {queryObj.theme = activeTheme.name;}
+    else {queryObj.theme="blue"}
     if (due) queryObj.due = due;
     if (targ) queryObj.target = targ;
     if (title) queryObj.title = title;
