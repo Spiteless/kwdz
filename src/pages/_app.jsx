@@ -1,18 +1,17 @@
+import React from "react";
 import "../styles/globals.css";
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import CssBaseline from "@mui/material/CssBaseline";
 import { ContextProvider } from "@context/AppContext";
-
-import theme from "../themes";
+import ThemeContext from "@context/CustomThemeContext";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeContext>
       <ContextProvider>
         <CssBaseline />
         <Component {...pageProps} />
       </ContextProvider>
-    </ThemeProvider>
+    </ThemeContext>
   );
 }
 

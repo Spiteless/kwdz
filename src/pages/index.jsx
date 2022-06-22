@@ -1,12 +1,16 @@
 import Head from "next/head";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Button } from "@mui/material";
 
 import KeywordInput from "@components/KeywordInput/KeywordDisplay";
 import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
 import EdgePanel from "@components/EdgePanel/EdgePanel";
 
-export default function Home() {
+import { useThemeContext } from "@context/CustomThemeContext";
+
+export default function Home(props) {
+  const { toggleTheme } = useThemeContext();
+
   return (
     <Container>
       <Head>
@@ -17,7 +21,6 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.svg" />
       </Head>
-
       <NavBar />
       <EdgePanel />
 

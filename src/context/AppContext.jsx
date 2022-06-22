@@ -4,6 +4,7 @@ import queryString from "query-string";
 
 import { processKeywords, getColor } from "@lib/processKeywords";
 import { copyToClipboard } from "@lib/clipboard";
+import { useThemeContext } from "./CustomThemeContext";
 
 const AppContext = React.createContext();
 
@@ -22,6 +23,7 @@ const initialContext = {
 
 export function ContextProvider({ children }) {
   const router = useRouter();
+  const { toggleTheme } = useThemeContext();
 
   const [context, setContext] = useState(initialContext);
 
@@ -103,9 +105,9 @@ export function ContextProvider({ children }) {
       }
     }
 
-    if (parsed.due) setDue_(parsed.due)
+    if (parsed.due) setDue_(parsed.due);
     if (parsed.target) setTarget_(parsed.target);
-    if (parsed.title) setTitle_(parsed.title)
+    if (parsed.title) setTitle_(parsed.title);
 
     let resultInitialKw;
     if (initialKW) {
@@ -174,7 +176,7 @@ export function ContextProvider({ children }) {
     const num = parseInt(text);
     if (Number.isInteger(num)) {
       setTarg(num);
-      setUpdateRouter(updateRouter + 1)
+      setUpdateRouter(updateRouter + 1);
       return "Target Set!";
     } else {
       return "Target Not Set :(";
@@ -183,7 +185,7 @@ export function ContextProvider({ children }) {
 
   const setTitle_ = (text) => {
     setTitle(text);
-    setUpdateRouter(updateRouter + 1)
+    setUpdateRouter(updateRouter + 1);
     return "Title Set!";
   };
 
@@ -195,7 +197,7 @@ export function ContextProvider({ children }) {
 
   const setDue_ = (text) => {
     setDue(text);
-    setUpdateRouter(updateRouter + 1)
+    setUpdateRouter(updateRouter + 1);
     return "DueDate Set!";
   };
 
@@ -217,6 +219,10 @@ export function ContextProvider({ children }) {
     }, 25);
   };
 
+  const toggleTheme_ = (theme) => {
+    toggleTheme(theme);
+  };
+
   const functionNames = {
     "Set target": { func: setTarget_ },
     "Set due date": { func: setDue_ },
@@ -225,6 +231,8 @@ export function ContextProvider({ children }) {
     "Set keywords()": { func: openKeywordField },
     "Copy missing to clipboard()": { func: copyToClipboard, args: keywords },
     "View - unhide all keywords()": { func: unhideAll },
+    "Theme - toggle theme()": { func: toggleTheme_, args: false },
+    "Theme - set theme()": { func: toggleTheme_ },
   };
 
   const searchFuncs = {
@@ -235,7 +243,7 @@ export function ContextProvider({ children }) {
   const updateKeywords = (article, keywords, ...args) => {
     const newKeywords = processKeywords(article, keywords, ...args);
     setKeywords(newKeywords);
-    setUpdateRouter(updateRouter + 1)
+    setUpdateRouter(updateRouter + 1);
 
     return newKeywords;
   };
