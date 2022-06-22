@@ -1,15 +1,19 @@
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Toolbar from "@mui/material/Toolbar";
 import { useAppState } from "@context/AppContext";
+import { Button } from "@material-ui/core";
 
 import KeywordEntry from "@components/KeywordInput/KeywordEntry";
+import { useThemeContext } from "@context/CustomThemeContext";
 
 function EdgePanel({ window }) {
   const { toggleDrawer, drawerOpen } = useAppState();
+  const { toggleTheme } = useThemeContext();
+
   const drawer = (
     <Box
       sx={{
@@ -18,7 +22,9 @@ function EdgePanel({ window }) {
         flexDirection: "column",
       }}
     >
-      <Toolbar />
+      <Toolbar sx={{display: 'flex', justifyContent: 'center',}}>
+        <Button variant="outlined" color="primary" onClick={() => toggleTheme()}>Toggle Theme</Button>
+      </Toolbar>
       <Divider />
       <List
         sx={{

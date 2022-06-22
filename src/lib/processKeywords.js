@@ -1,3 +1,5 @@
+import { orange, yellow, grey, green, purple } from '@mui/material/colors';
+
 function processKeywords(article, phrases, props) {
   phrases.map(phrase => {
     if (props) phrase.hidden = props.hidden
@@ -31,9 +33,9 @@ export function getColor(phrase) {
   const colors = {
     "n": "success",
     "0": "default",
-    "1": "secondary",
-    "2": "info",
-    "3": "warning",
+    "1": "info",
+    "2": "warning",
+    "3": "error",
   }
   return (phrase.count > 0) ? colors.n : colors[phrase.group]
 }
