@@ -95,7 +95,7 @@ export function ContextProvider({ children }) {
         }
         group.map((k) => {
           let val = {
-            name: k.toLowerCase(),
+            name: k.toLowerCase().trim(),
             group: tag,
             count: 0,
             hidden: false,
