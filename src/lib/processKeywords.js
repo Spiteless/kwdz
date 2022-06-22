@@ -1,5 +1,3 @@
-import { orange, yellow, grey, green, purple } from '@mui/material/colors';
-
 function processKeywords(article, phrases, props) {
   phrases.map(phrase => {
     if (props) phrase.hidden = props.hidden
@@ -8,36 +6,45 @@ function processKeywords(article, phrases, props) {
     phrase.color = getColor(phrase)
 
   })
-  //sort by name first
-  phrases.sort((a, b) => {
+  sortByName(phrases)
+  sortByGroup(phrases)
+  sortByCount(phrases)
+  return phrases
+}
+
+function sortByName(phrases) {
+  return phrases.sort((a, b) => {
     if (a.name < b.name) return -1
     if (a.name > b.name) return 1
     return 0
   })
-  //sort by number of occurances
-  phrases.sort((a, b) => {
-    if (a.name < b.name) return -1
-    if (a.name > b.name) return 1
+}
+
+function sortByGroup(phrases) {
+  return phrases.sort((a, b) => {
+    if (a.group < b.group) return -1
+    if (a.group > b.group) return 1
     return 0
   })
-  //sort by grouping
-  phrases.sort((a, b) => {
+}
+
+function sortByCount(phrases) {
+  return phrases.sort((a, b) => {
     if (a.count < b.count) return -1
     if (a.count > b.count) return 1
     return 0
   })
-  return phrases
 }
 
 export function getColor(phrase) {
   const colors = {
     "n": "success",
-    "0": "default",
+    "0": "secondary",
     "1": "info",
     "2": "warning",
     "3": "error",
   }
-  return (phrase.count > 0) ? colors.n : colors[phrase.group]
+  return colors[phrase.group]
 }
 
 function occurrences(string, subString, allowOverlapping = false) {

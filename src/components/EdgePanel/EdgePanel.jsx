@@ -11,8 +11,7 @@ import KeywordEntry from "@components/KeywordInput/KeywordEntry";
 import { useThemeContext } from "@context/CustomThemeContext";
 
 function EdgePanel({ window }) {
-  const { toggleDrawer, drawerOpen } = useAppState();
-  const { toggleTheme } = useThemeContext();
+  const { toggleDrawer, drawerOpen, toggleTheme } = useAppState();
 
   const drawer = (
     <Box

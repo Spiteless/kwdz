@@ -1,3 +1,4 @@
+import { Theme } from "@mui/material/styles";
 import {
   TextField,
   Typography,
@@ -115,7 +116,13 @@ export default function KeywordInput({}) {
             }}
             onDelete={(e) => changeHidden(e, index)}
             deleteIcon={visibilityIcon}
-            sx={{ display: option.hidden ? "none" : "flex" }}
+            sx={{
+              display: option.hidden ? "none" : "flex",
+              boxSizing: "border-box",
+              borderWidth: 3,
+              borderStyle: "solid",
+              borderColor: `${option.color}.light`
+            }}
           />
         ))
       }

@@ -140,12 +140,10 @@ export function ContextProvider({ children }) {
         }
       });
 
-    if (activeTheme) queryObj.theme = activeTheme.name  ;
+    if (activeTheme) queryObj.theme = activeTheme.name;
     if (due) queryObj.due = due;
     if (targ) queryObj.target = targ;
     if (title) queryObj.title = title;
-
-    console.log(activeTheme.name, updateRouter)
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
@@ -160,7 +158,7 @@ export function ContextProvider({ children }) {
 
     group.map((k) => {
       let val = {
-        name: k.toLowerCase(),
+        name: k.toLowerCase().trim(),
         group: 0,
         count: 0,
         hidden: false,
@@ -224,7 +222,7 @@ export function ContextProvider({ children }) {
   const toggleTheme_ = (theme) => {
     toggleTheme(theme);
     setUpdateRouter(updateRouter + 1);
-    return `Theme set to ${theme}!`
+    return `Theme set to ${theme}!`;
   };
 
   const functionNames = {

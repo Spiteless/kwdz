@@ -6,9 +6,6 @@ const theme = createTheme({
     primary: {
       main: "#0096FF",
     },
-    secondary: {
-      main: "#ff9100",
-    },
   },
   name: "dark",
 }
