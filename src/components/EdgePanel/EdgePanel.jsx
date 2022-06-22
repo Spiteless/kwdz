@@ -5,7 +5,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Toolbar from "@mui/material/Toolbar";
 import { useAppState } from "@context/AppContext";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material"
 
 import KeywordEntry from "@components/KeywordInput/KeywordEntry";
 import { useThemeContext } from "@context/CustomThemeContext";
