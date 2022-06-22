@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 
-import { processKeywords, getColor } from "@lib/processKeywords";
+import { processKeywords, getColor, clean } from "@lib/processKeywords";
 import { copyToClipboard } from "@lib/clipboard";
 import { useThemeContext } from "./CustomThemeContext";
 
@@ -190,7 +190,7 @@ export function ContextProvider({ children }) {
   };
 
   const setArticle_ = (text) => {
-    setArticle(text);
+    setArticle(clean(text));
     setForceRerender(forceRerender + 1);
     return "Article Set!";
   };
