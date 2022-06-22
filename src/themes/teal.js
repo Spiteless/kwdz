@@ -6,7 +6,8 @@ const theme = createTheme({
     primary: {
       main: teal[700]
     }
-  }
+  },
+  name: "teal",
 }
 );
 

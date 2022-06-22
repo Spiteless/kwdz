@@ -7,6 +7,7 @@ const theme = createTheme({
       main: purple[400],
     },
   },
+  name: "purple",
 }
 );
 

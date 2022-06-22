@@ -6,7 +6,8 @@ const theme = createTheme({
     primary: {
       main: grey.A700
     }
-  }
+  },
+  name: "grey",
 }
 );
 

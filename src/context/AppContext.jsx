@@ -23,7 +23,7 @@ const initialContext = {
 
 export function ContextProvider({ children }) {
   const router = useRouter();
-  const { toggleTheme } = useThemeContext();
+  const { toggleTheme, activeTheme } = useThemeContext();
 
   const [context, setContext] = useState(initialContext);
 
@@ -31,6 +31,7 @@ export function ContextProvider({ children }) {
   const [targ, setTarg] = useState(false);
   const [due, setDue] = useState("");
   const [title, setTitle] = useState("");
+  const [theme, setTheme] = useState("");
 
   const [article, setArticle] = useState("");
   const [disabled, setDisabled] = useState(false);
@@ -105,14 +106,12 @@ export function ContextProvider({ children }) {
       }
     }
 
+    if (parsed.theme) toggleTheme_(parsed.theme);
     if (parsed.due) setDue_(parsed.due);
     if (parsed.target) setTarget_(parsed.target);
     if (parsed.title) setTitle_(parsed.title);
 
-    let resultInitialKw;
-    if (initialKW) {
-      resultInitialKw = updateKeywords("", initialKW);
-    }
+    if (initialKW) updateKeywords("", initialKW);
   }, [router.isReady]);
 
   useEffect(() => {
@@ -141,9 +140,12 @@ export function ContextProvider({ children }) {
         }
       });
 
+    if (activeTheme) queryObj.theme = activeTheme.name  ;
     if (due) queryObj.due = due;
     if (targ) queryObj.target = targ;
     if (title) queryObj.title = title;
+
+    console.log(activeTheme.name, updateRouter)
 
     let query = "/?" + queryString.stringify(queryObj);
     router.push(query, undefined, { shallow: true });
@@ -221,6 +223,8 @@ export function ContextProvider({ children }) {
 
   const toggleTheme_ = (theme) => {
     toggleTheme(theme);
+    setUpdateRouter(updateRouter + 1);
+    return `Theme set to ${theme}!`
   };
 
   const functionNames = {
@@ -273,6 +277,8 @@ export function ContextProvider({ children }) {
     title,
     targ,
     due,
+    updateRouter,
+    toggleTheme: toggleTheme_,
   };
 
   return <AppContext.Provider value={exports}>{children}</AppContext.Provider>;

@@ -9,7 +9,7 @@ export function useThemeContext() {
 }
 
 export default function ThemeContext({ children }) {
-  let currentTheme = getTheme(1);
+  let currentTheme = getTheme(0);
   const [activeTheme, setActiveTheme] = useState(currentTheme);
   const [num, setNum] = useState(0);
 
@@ -23,6 +23,7 @@ export default function ThemeContext({ children }) {
       setNum(num + 1);
     }
     if (nextTheme) setActiveTheme(nextTheme);
+
   };
 
   const exports = {

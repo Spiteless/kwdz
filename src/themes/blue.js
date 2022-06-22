@@ -6,7 +6,8 @@ const theme = createTheme({
     primary: {
       main: blue[400]
     }
-  }
+  },
+  name: "blue",
 }
 );
 

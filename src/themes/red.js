@@ -7,6 +7,7 @@ const theme = createTheme({
       main: red[400],
     },
   },
+  name: "red",
 }
 );
 

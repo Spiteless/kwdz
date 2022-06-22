@@ -10,6 +10,7 @@ const theme = createTheme({
       main: "#ff9100",
     },
   },
+  name: "dark",
 }
 );
 
