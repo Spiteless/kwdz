@@ -8,7 +8,7 @@ import { useAppState } from "@context/AppContext";
 import { Button } from "@mui/material"
 
 import KeywordEntry from "@components/KeywordInput/KeywordEntry";
-import { useThemeContext } from "@context/CustomThemeContext";
+
 
 function EdgePanel({ window }) {
   const { toggleDrawer, drawerOpen, toggleTheme } = useAppState();
