@@ -23,7 +23,10 @@ export default function ThemeContext({ children }) {
       setNum(num + 1);
     }
     if (nextTheme) setActiveTheme(nextTheme);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c428c6 (fix: Remove console.log, update yarn.lock)
   };
 
   const exports = {
