@@ -31,7 +31,8 @@ export const themes = {
 
 export const themeCount = 6
 
-export default function getTheme(theme) {
+export default function getTheme(theme_) {
+  const theme = ("" + theme_).toLowerCase()
   if (theme in themes) {
     return themes[theme]
   } else {
