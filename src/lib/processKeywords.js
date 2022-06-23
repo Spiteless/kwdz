@@ -86,6 +86,8 @@ const clean = (str) => {
 
   return (str
     .replace(/%%(.|\n)*%%/gm, "")
+    .replace(/{{[^}]*}}/gm, "")
+    
     //select everything between double-percent signs and remove it
     .replace(/[^\w\s]|_/g, "")
     .replace(/\s+/g, " ") //replace whitespace characters with ' '
