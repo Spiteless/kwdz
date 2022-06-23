@@ -26,7 +26,7 @@ export const themes = {
     grey: 4,
     teal: 5,
   },
-  count: 5
+  count: 6
 }
 
 export const themeCount = 6
