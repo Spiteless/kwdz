@@ -28,7 +28,7 @@ const visibilityIcon = <VisibilityOffIcon fontSize="small" />;
 const xIcon = <ClearRoundedIcon fontSize="small" />;
 
 export default function KeywordInput({}) {
-  const { context, keywords, setKeywords, getColor } = useAppState();
+  const { keywords, setKeywords, getColor } = useAppState();
 
   const changeHidden = (e, index) => {
     const newKeywords = [...keywords];
@@ -54,7 +54,6 @@ export default function KeywordInput({}) {
     setKeywords(newKeywords);
   };
 
-  if (!context.isLoaded) return <></>;
   return (
     <Autocomplete
       multiple
