@@ -4,13 +4,22 @@ import queryString from "query-string";
 
 import { processKeywords, getColor, clean } from "@lib/processKeywords";
 import { copyToClipboard } from "@lib/clipboard";
+import {
+  reduceToArrays,
+  createKeywordsFromRouter,
+  parseQuery,
+  createKeywordsFromApp,
+  createQueryString,
+} from "@lib/routerAssist";
 import { useThemeContext } from "./CustomThemeContext";
+import { useRouterContext } from "./RouterContext/RouterContext";
 
 const AppContext = React.createContext();
 
 export function useAppState() {
   return useContext(AppContext);
 }
+createQueryString;
 
 const initialContext = {
   target: false,
@@ -22,10 +31,10 @@ const initialContext = {
 };
 
 export function ContextProvider({ children }) {
-  const router = useRouter();
-  const { toggleTheme, activeTheme } = useThemeContext();
+  // const router = useRouter();
 
-  const [context, setContext] = useState(initialContext);
+  const { router, setRouter } = useRouterContext();
+  const { toggleTheme, activeTheme } = useThemeContext();
 
   const [keywords, setKeywords] = useState([]);
   const [targ, setTarg] = useState(false);
@@ -51,60 +60,23 @@ export function ContextProvider({ children }) {
     setDrawerOpen(openState);
   };
 
-  const openDrawer = () => {
-    setTimeout(() => {
-      document.getElementById("keywordField").focus();
-    }, 25);
-    setDrawerOpen(true);
-  };
-  const closeDrawer = () => setDrawerOpen(false);
-
   useEffect(() => {
     //Set application state via router from initial load
-    const newContext = { ...context };
-
-    newContext.isLoaded = true;
-    newContext.target = router.query.target || false;
-    newContext.dueDate = router.query.due || "";
+    let parsed = parseQuery(router.asPath);
 
     if (
       // open drawer if there are no keywords
       router.isReady &&
-      !router.query.kw &&
-      !router.query.k0 &&
-      !router.query.k1 &&
-      !router.query.k2 &&
-      !router.query.k3
+      !parsed.kw &&
+      !parsed.k0 &&
+      !parsed.k1 &&
+      !parsed.k2 &&
+      !parsed.k3
     ) {
       openDrawer();
     }
-    setContext(newContext);
 
-    // create inital keywords array
-    let initialKW = [];
-    const names = { kw: 0, k0: 0, k1: 1, k2: 2, k3: 3 };
-
-    let parsed = queryString.parse(router.asPath.replace("/?", ""));
-
-    for (const kw in names) {
-      //if router.query[kw] exists
-      if (!!parsed[kw]) {
-        let group = parsed[kw];
-        let tag = names[kw];
-        if (typeof group === "string") {
-          group = [group];
-        }
-        group.map((k) => {
-          let val = {
-            name: k.toLowerCase().trim(),
-            group: tag,
-            count: 0,
-            hidden: false,
-          };
-          initialKW.push(val);
-        });
-      }
-    }
+    let initialKW = createKeywordsFromRouter(parsed);
 
     if (parsed.theme) toggleTheme_(parsed.theme);
     if (parsed.due) setDue_(parsed.due);
@@ -124,50 +96,34 @@ export function ContextProvider({ children }) {
 
   useEffect(() => {
     // keep router up to date
-    let queryObj = {};
+    let queryObj = reduceToArrays(keywords);
 
-    keywords
-      .reduce(
-        (previousValue, currentValue) => {
-          previousValue[currentValue.group].push(currentValue.name);
-          return previousValue;
-        },
-        [[], [], [], []]
-      )
-      .map((group, index) => {
-        if (group.length > 0 && group[0]) {
-          queryObj[`k${index}`] = [...group];
-        }
-      });
+    activeTheme
+      ? (queryObj.theme = activeTheme.name)
+      : (queryObj.theme = "blue");
 
-    if (activeTheme) {queryObj.theme = activeTheme.name;}
-    else {queryObj.theme="blue"}
     if (due) queryObj.due = due;
     if (targ) queryObj.target = targ;
     if (title) queryObj.title = title;
 
-    let query = "/?" + queryString.stringify(queryObj);
-    router.push(query, undefined, { shallow: true });
+    // let query = createQueryString(queryObj);
+    // router.push(query, undefined, { shallow: true });
+    setRouter(queryObj)
   }, [updateRouter]);
 
-  function createNewKeywords(newKeywordsText, article) {
-    let initialKW = [];
-    let group = newKeywordsText
-      .replace("\r", "")
-      .split("\n")
-      .filter((k) => k.length > 0);
-
-    group.map((k) => {
-      let val = {
-        name: k.toLowerCase().trim(),
-        group: 0,
-        count: 0,
-        hidden: false,
-      };
-      initialKW.push(val);
-    });
+  function createNewKeywords(newKeywordsText) {
+    console.log([newKeywordsText]);
+    let initialKW = createKeywordsFromApp(newKeywordsText);
     updateKeywords(article, initialKW);
   }
+
+  const openDrawer = () => {
+    setTimeout(() => {
+      document.getElementById("keywordField").focus();
+    }, 25);
+    setDrawerOpen(true);
+  };
+  const closeDrawer = () => setDrawerOpen(false);
 
   /*
   ------------------------------
@@ -252,8 +208,6 @@ export function ContextProvider({ children }) {
   };
 
   const exports = {
-    context,
-    setContext,
     disabled,
     setDisabled,
     keywords,
