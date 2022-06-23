@@ -23,7 +23,6 @@ export default function ThemeContext({ children }) {
       setNum(num + 1);
     }
     if (nextTheme) setActiveTheme(nextTheme);
-    console.log(theme, `oldNum: ${num}, newNum: ${num+1}, calc: ${num % themes.count} `, activeTheme.name)
 
   };
 
