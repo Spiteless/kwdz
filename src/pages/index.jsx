@@ -6,9 +6,11 @@ import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
 import EdgePanel from "@components/EdgePanel/EdgePanel";
 import { useAppState } from "@context/AppContext";
+import { useThemeContext } from "@context/CustomThemeContext";
 
 export default function Home({}) {
-  const { title } = useAppState()
+  const { title } = useAppState();
+  const { activeTheme } = useThemeContext();
 
   return (
     <Container>
@@ -18,7 +20,11 @@ export default function Home({}) {
           name="Phrases Tracker Tool"
           content="Simple tracker to see how often keywords are used in an article"
         />
-        <link rel="icon" href="/favicon.svg" />
+        {activeTheme.name ? (
+          <link rel="icon" href={`/favicons/${activeTheme.name}/favicon.svg`} />
+        ) : (
+          <link rel="icon" href="/favicon.svg" />
+        )}
       </Head>
       <NavBar />
       <EdgePanel />
