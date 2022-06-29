@@ -108,7 +108,7 @@ export default function ContextProvider({ children }) {
 
     // let query = createQueryString(queryObj);
     // router.push(query, undefined, { shallow: true });
-    setRouter(queryObj)
+    setRouter(queryObj);
   }, [updateRouter]);
 
   function createNewKeywords(newKeywordsText) {
@@ -182,16 +182,27 @@ export default function ContextProvider({ children }) {
     return `Theme set to ${theme}!`;
   };
 
+  const status = (keywords) => {
+    let words = `${wordCount}${targ ? `/${targ}` : ""}`;
+    let kw = `${keywords.filter((k) => k.count > 0).length}/${keywords.length}`;
+    let output = `{{ ${title}: ${words} words, ${kw} keywords used }}`;
+    navigator.clipboard.writeText(output);
+  };
+
   const functionNames = {
     "Set target": { func: setTarget_ },
     "Set due date": { func: setDue_ },
     "Set title": { func: setTitle_ },
     "Set article": { func: setArticle_ },
     "Set keywords()": { func: openKeywordField },
-    "Copy missing to clipboard()": { func: copyToClipboard, args: keywords },
+    "Clipboard - copy missing to clipboard()": {
+      func: copyToClipboard,
+      args: keywords,
+    },
     "View - unhide all keywords()": { func: unhideAll },
     "Theme - toggle theme()": { func: toggleTheme_, args: false },
     "Theme - set theme()": { func: toggleTheme_ },
+    "Clipboard - status()": { func: status, args: keywords },
   };
 
   const searchFuncs = {
