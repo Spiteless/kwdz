@@ -30,7 +30,7 @@ const initialContext = {
   title: "Tracker",
 };
 
-export function ContextProvider({ children }) {
+export default function ContextProvider({ children }) {
   // const router = useRouter();
 
   const { router, setRouter } = useRouterContext();
