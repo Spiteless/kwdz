@@ -6,10 +6,7 @@ import ArticleInput from "@components/ArticleInput";
 import NavBar from "@components/NavBar";
 import EdgePanel from "@components/EdgePanel/EdgePanel";
 
-import { useThemeContext } from "@context/CustomThemeContext";
-
-export default function Home(props) {
-  const { toggleTheme } = useThemeContext();
+export default function Home({}) {
 
   return (
     <Container>
