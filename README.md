@@ -28,15 +28,7 @@ Access the functions of this tool quickly and easily via the Command Bar. The co
 "Set title:" sets the title in AppBar -- string
 "Set article:" updates article text -- string
 "Set keywords():" toggles EdgePanel for keyword entry
-<<<<<<< HEAD
-<<<<<<< HEAD
 "Copy missing to clipboard():" Adds missing keywords to the clipboard surrounded by {{ curly braces }}
-=======
-"Copy missing to clipboard():" Adds missing keywords to the clipboard surrounded by %% percent symbols %%
->>>>>>> 8158b50 (Update README.md)
-=======
-"Copy missing to clipboard():" Adds missing keywords to the clipboard surrounded by {{ curly braces }}
->>>>>>> 6cc06fb (Update README.md)
 "View - unhide all keywords():" sets hidden: false on all keywords
 "Theme - toggle theme():" rotates to next theme
 "Theme - set theme():" changes to theme by name or number
