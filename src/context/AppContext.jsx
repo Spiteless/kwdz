@@ -1,4 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 
@@ -43,6 +44,7 @@ export default function ContextProvider({ children }) {
   const [theme, setTheme] = useState("");
 
   const [article, setArticle] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [disabled, setDisabled] = useState(false);
   const [forceRerender, setForceRerender] = useState(0);
   const [updateRouter, setUpdateRouter] = useState(0);
@@ -108,11 +110,10 @@ export default function ContextProvider({ children }) {
 
     // let query = createQueryString(queryObj);
     // router.push(query, undefined, { shallow: true });
-    setRouter(queryObj)
+    setRouter(queryObj);
   }, [updateRouter]);
 
   function createNewKeywords(newKeywordsText) {
-    console.log([newKeywordsText]);
     let initialKW = createKeywordsFromApp(newKeywordsText);
     updateKeywords(article, initialKW);
   }
@@ -124,6 +125,47 @@ export default function ContextProvider({ children }) {
     setDrawerOpen(true);
   };
   const closeDrawer = () => setDrawerOpen(false);
+
+  const hotkeysRef = useRef({
+    stamp: performance.now(),
+    count: 0,
+  });
+
+  const focusElement = (num) => {
+    const locations = [
+      document.getElementById("SearchInput"),
+      document.getElementById("article"),
+      document.getElementById("tags-filled"),
+    ];
+    locations[num % locations.length].focus()
+  };
+
+  useHotkeys(
+    // Alt + / focuses SearchInput, clears input field
+    "alt+/",
+    () => {
+      const currentTime = performance.now();
+      const diff = currentTime - hotkeysRef.current.stamp;
+      if (diff < 500) {
+        hotkeysRef.current = {
+          stamp: currentTime,
+          count: hotkeysRef.current.count + 1,
+        };
+      } else {
+        hotkeysRef.current = {
+          stamp: currentTime,
+          count: 0,
+        };
+      }
+      focusElement(hotkeysRef.current.count);
+      closeDrawer();
+      // focusElement(3);
+      setSearchValue("");
+    },
+    {
+      enableOnTags: ["TEXTAREA", "INPUT", "SELECT"],
+    }
+  );
 
   /*
   ------------------------------
@@ -214,6 +256,8 @@ export default function ContextProvider({ children }) {
     setKeywords,
     article,
     setArticle,
+    searchValue,
+    setSearchValue,
     searchFuncs,
     getColor,
     updateKeywords,
