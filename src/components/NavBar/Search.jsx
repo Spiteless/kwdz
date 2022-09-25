@@ -51,6 +51,8 @@ export default function Search() {
   const {
     searchFuncs,
     closeDrawer,
+    searchValue,
+    setSearchValue,
     //
   } = useAppState();
   const { split, functionNames } = searchFuncs;
@@ -59,27 +61,28 @@ export default function Search() {
     return { label: n + ": " };
   });
 
-  useHotkeys(
-    // Alt + / focuses SearchInput, clears input field
-    "alt+/",
-    () => {
-      closeDrawer();
-      document.getElementById("SearchInput").focus();
-      setInputValue("");
-    },
-    {
-      enableOnTags: ["TEXTAREA", "INPUT", "SELECT"],
-    }
-  );
+  // useHotkeys(
+  //   // Alt + / focuses SearchInput, clears input field
+  //   "alt+/",
+  //   () => {
+  //     closeDrawer();
+  //     document.getElementById("SearchInput").focus();
+  //     setInputValue("");
+  //   },
+  //   {
+  //     enableOnTags: ["TEXTAREA", "INPUT", "SELECT"],
+  //   }
+  // );
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setInputValue("");
+    setSearchValue("");
+    
   };
 
   const handleAutocompleteSubmit = (e) => {
     e.preventDefault();
-    const [key, input] = split(inputValue);
+    const [key, input] = split(searchValue);
     if (!functionNames.hasOwnProperty(key)) return false;
     let { func, args } = functionNames[key];
     if (!func) {
@@ -87,13 +90,13 @@ export default function Search() {
     }
     if (args) func(args);
     if (!args) func(input);
-    setInputValue("");
+    setSearchValue("");
   };
 
-  const [inputValue, setInputValue] = useState("");
+  // const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e, value) => {
-    setInputValue(value);
+    setSearchValue(value);
   };
 
   return (
@@ -105,7 +108,8 @@ export default function Search() {
       options={menuFunctions}
       sx={{ width: 300 }}
       onSubmit={(e) => handleAutocompleteSubmit(e)}
-      inputValue={inputValue}
+      inputValue={searchValue}
+      
       onInputChange={handleInputChange}
       componentsProps={{
         paper: {
