@@ -6,6 +6,7 @@
       "@features/*": ["src/features/*"],
       "@styles/*": ["src/styles/*"],
       "@context/*": ["src/context/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@images/*": ["src/assets/images/*"],
       "@lib/*": ["src/lib/*"]
     }
