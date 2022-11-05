@@ -14,6 +14,8 @@ import {
 import { useThemeContext } from "./CustomThemeContext";
 import { useRouterContext } from "./RouterContext/RouterContext";
 
+import useEventListener from "@hooks/useEventListener";
+
 const AppContext = React.createContext();
 
 export function useAppState() {
@@ -111,6 +113,14 @@ export default function ContextProvider({ children }) {
     setRouter(queryObj);
   }, [updateRouter]);
 
+  const windowFocusArticle = (e) => {
+    focusArticle()
+  };
+
+  if (typeof window !== "undefined") {
+    useEventListener("focus", windowFocusArticle);
+  } 
+
   function createNewKeywords(newKeywordsText) {
     console.log([newKeywordsText]);
     let initialKW = createKeywordsFromApp(newKeywordsText);
@@ -176,6 +186,12 @@ export default function ContextProvider({ children }) {
     }, 25);
   };
 
+  const focusArticle = () => {
+    setTimeout(() => {
+      document.getElementById("article").focus();
+    }, 25);
+  };
+
   const toggleTheme_ = (theme) => {
     toggleTheme(theme);
     setUpdateRouter(updateRouter + 1);
@@ -219,6 +235,7 @@ export default function ContextProvider({ children }) {
   };
 
   const exports = {
+    focusArticle,
     disabled,
     setDisabled,
     keywords,
