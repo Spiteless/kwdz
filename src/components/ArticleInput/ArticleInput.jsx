@@ -23,6 +23,7 @@ export default function ArticleInput(props) {
 
   const [loading, setLoading] = useState(false);
   const [localArticle, setLocalArticle] = useState("");
+  const [localArticleBackup, setLocalArticleBackup] = useState("");
 
   useEffect(() => {
     if (article !== localArticle) setLocalArticle(article);
@@ -35,16 +36,21 @@ export default function ArticleInput(props) {
     setLoading(false);
   };
 
-  const debouncedCallback = useCallback(
+  const debouncedSubmitArticle = useCallback(
     debounce((text) => submitArticle(text), 350),
     []
   );
+
+  const handleFocus = (e) => {
+    setLocalArticle("");
+    setLocalArticleBackup(localArticle)
+  }
 
   const handleArticleChange = (e) => {
     const newArticleText = clean(e.target.value);
     setLoading(true);
     setLocalArticle(newArticleText);
-    debouncedCallback(newArticleText);
+    debouncedSubmitArticle(newArticleText);
   };
 
   let textLabel = `Word Count: ${wordCount}`;
@@ -73,13 +79,15 @@ export default function ArticleInput(props) {
       value={localArticle}
       id="article"
       label={textLabel}
-      placeholder="Paste article text here."
+      placeholder={localArticleBackup.length > 0 ? localArticleBackup : "Paste article text here."}
       multiline
       variant="outlined"
       onChange={handleArticleChange}
       onClick={() => setDisabled(true)}
+      onFocus={handleFocus}
       fullWidth
       rows={2}
     />
   );
 }
+
