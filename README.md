@@ -1,8 +1,8 @@
-# Keyword Tracker
+# Kwdz Keyword Tracker
 
 This application is built to be a lightweight serverless productivity tool to boost the preformance of content writers. Application state is preserved in the address bar making the app making easily shareable while also dodging the requirement of hanging onto any customer data.
 
-Site is live at [keyword-tracker.trilliumsmith.com](https://keyword-tracker.trilliumsmith.com/)
+Site is live at [kwdz.app](https://kwdz.app/)
 
 ## Core Technologies
 
@@ -23,15 +23,15 @@ If your article needs to be a minimum length, you can use ```Set target:``` to a
 Access the functions of this tool quickly and easily via the Command Bar. The command bar can be accessed by pressing Alt + /, and exposes the majority of the sites functionality at a few keystrokes.
 
 ```js
-"Set target:" sets the target wordcount -- number
-"Set due date:" sets the target wordcount -- string
-"Set title:" sets the title in AppBar -- string
-"Set article:" updates article text -- string
-"Set keywords():" toggles EdgePanel for keyword entry
-"Copy missing to clipboard():" Adds missing keywords to the clipboard surrounded by {{ curly braces }}
-"View - unhide all keywords():" sets hidden: false on all keywords
-"Theme - toggle theme():" rotates to next theme
-"Theme - set theme():" changes to theme by name or number
+"Set target:" // sets the target wordcount -- number
+"Set due date:" // sets the target wordcount -- string
+"Set title:" // sets the title in AppBar -- string
+"Set article:" // updates article text -- string
+"Set keywords():" // toggles EdgePanel for keyword entry
+"Copy missing to clipboard():" // Adds missing keywords to the clipboard surrounded by {{ curly braces }}
+"View - unhide all keywords():" // sets hidden: false on all keywords
+"Theme - toggle theme():" // rotates to next theme
+"Theme - set theme():" // changes to theme by name or number
 ```
 
 ## Give it a try!
@@ -69,7 +69,7 @@ website
 world wide web
 ```
 
-That list can be plugged into the Keyword Tracker, try it out and paste the keywords in from a [blank](https://keyword-tracker.trilliumsmith.com/) slate or use the version with the [state preserved from the address bar](https://keyword-tracker.trilliumsmith.com/?k0=eventdriven%20programming&k0=functional%20programming&k0=highlevel%20programming%20language&k0=justintime%20compilation&k0=library&k0=objectoriented%20programming&k0=prototypebased%20programming&k0=source%20code&k0=application%20programming%20interface&k0=client&k0=css&k0=data%20structure&k0=document%20object%20model&k0=dynamic%20typing&k0=ecmascript&k0=firstclass%20function&k0=html&k0=imperative%20programming&k0=javascript%20engine&k0=programming%20language&k0=regular%20expression&k0=user&k0=web%20browser&k0=web%20page&k0=website&k0=world%20wide%20web&k0=javascript&theme=dark&title=Wikipedia%20JavaScript).
+That list can be plugged into the Keyword Tracker, try it out and paste the keywords in from a [blank](https://kwdz.app/) slate or use the version with the [state preserved from the address bar](https://kwdz.app/?k0=eventdriven%20programming&k0=functional%20programming&k0=highlevel%20programming%20language&k0=justintime%20compilation&k0=library&k0=objectoriented%20programming&k0=prototypebased%20programming&k0=source%20code&k0=application%20programming%20interface&k0=client&k0=css&k0=data%20structure&k0=document%20object%20model&k0=dynamic%20typing&k0=ecmascript&k0=firstclass%20function&k0=html&k0=imperative%20programming&k0=javascript%20engine&k0=programming%20language&k0=regular%20expression&k0=user&k0=web%20browser&k0=web%20page&k0=website&k0=world%20wide%20web&k0=javascript&theme=dark&title=Wikipedia%20JavaScript).
 
 
 As we compose our article, paste in the following sections to simulate creating an SEO post. As the article text changes the app will scan the text for keywords, and indicate their occurances in the lower below.
@@ -85,19 +85,7 @@ JavaScript is a high-level, often just-in-time compiled language that conforms t
 The ECMAScript standard does not include any input/output, such as networking, storage, or graphics facilities. In practice, the web browser or other runtime system provides JavaScript APIs for I/O.
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 Keywords that have been used are moved to the end of the stack, and highlighted green. When all the keywords are green, then you've fulfilled your obligation to the algorithmic overlords.
-=======
-Keywords that have been used are moved to the end of the stack, and highlighted green. When all the keywords are green, then you've fulfilled your obligation tom the algorithmic overlords.
->>>>>>> 8158b50 (Update README.md)
-=======
-Keywords that have been used are moved to the end of the stack, and highlighted green. When all the keywords are green, then you've fulfilled your obligation to the algorithmic overlords.
->>>>>>> fe04bf7 (Update README.md)
-
-## Coming Soon
-
-See previous versions of this application to see how it evolved over time.
 
 ## Author
 
