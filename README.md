@@ -12,7 +12,7 @@ Site is live at [kwdz.app](https://kwdz.app/)
 
 ## Usage
 
-This application is intended to be used alongside a text editor such as [Google Docs](docs.new). Enter a list of keywords into the edge panel input separated by a line break "\n" to get started. Write your article and periodically paste the contexts into the article section to see which keywords you still need to hit.
+This application is intended to be used alongside a text editor such as [Google Docs](https://docs.new). Enter a list of keywords into the edge panel input separated by a line break "\n" to get started. Write your article and periodically paste the contexts into the article section to see which keywords you still need to hit.
 
 Use the ```Copy missing to clipboard():``` command to get a list of the keywords that still need to be entered. This block of text can be safely pasted in the body of your article in your text editor, the application removes all text wrapped in {{double curly braces}}.
 
