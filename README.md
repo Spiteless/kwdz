@@ -93,6 +93,6 @@ Keywords that have been used are moved to the end of the stack, and highlighted 
 
 ## Author
 
-Trillium Smith - [trillium@hatsfabulous.com](mailto:trillium@hatsfabulous.com)
+Trillium Smith - [trillium@trilliumsmith.com](mailto:trillium@trilliumsmith.com)
 
-Fullstack Developer based on the West Coast
+Software Developer based in Southern California.
