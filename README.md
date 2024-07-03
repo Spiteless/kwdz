@@ -1,3 +1,5 @@
+<a name="readme-top"></a>
+
 # Kwdz Keyword Tracker
 
 <div align="center">
@@ -8,11 +10,15 @@ This application is built to be a lightweight serverless productivity tool to bo
 
 Site is live at [kwdz.app](https://kwdz.app/)
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Core Technologies
 
  - Created with [Next.js](https://nextjs.org/)
  - Styled with [MUI](https://mui.com/)
  - Continuous deployment with [Netlify](https://www.netlify.com/)
+
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
 
@@ -21,6 +27,8 @@ This application is intended to be used alongside a text editor such as [Google 
 Use the ```Copy missing to clipboard():``` command to get a list of the keywords that still need to be entered. This block of text can be safely pasted in the body of your article in your text editor, the application removes all text wrapped in {{double curly braces}}.
 
 If your article needs to be a minimum length, you can use ```Set target:``` to add a word target, your word count updates each time the article is processed.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Command bar:
 
@@ -37,6 +45,8 @@ Access the functions of this tool quickly and easily via the Command Bar. The co
 "Theme - toggle theme():" // rotates to next theme
 "Theme - set theme():" // changes to theme by name or number
 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Give it a try!
 
@@ -91,8 +101,12 @@ The ECMAScript standard does not include any input/output, such as networking, s
 
 Keywords that have been used are moved to the end of the stack, and highlighted green. When all the keywords are green, then you've fulfilled your obligation to the algorithmic overlords.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Author
 
 Trillium Smith - [trillium@trilliumsmith.com](mailto:trillium@trilliumsmith.com)
 
 Software Developer based in Southern California.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
