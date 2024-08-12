@@ -3,7 +3,7 @@
 # Kwdz Keyword Tracker
 
 <div align="center">
-  <img width="561" alt="image" src="https://github.com/Spiteless/Spiteless/assets/5898009/62ec4930-edfe-4d55-885c-0a1f111582e4">
+  <img width="561" alt="image" src="https://github.com/trillium/trillium/assets/5898009/62ec4930-edfe-4d55-885c-0a1f111582e4">
 </div>
 
 This application is built to be a lightweight serverless productivity tool to boost the preformance of content writers. Application state is preserved in the address bar making the app making easily shareable while also dodging the requirement of hanging onto any customer data.
